@@ -5,11 +5,13 @@ const Path = require('path');
  
 module.exports = {
     mode: 'development',
-    entry: './client/Main.js',
+    entry: {
+        client: [ './client/Main.js' ]
+    },
     output: {
         path: Path.resolve("./build"),
-        filename: '[name].client.js',
-        chunkFilename: '[name].client.js'
+        filename: 'main.[runtime].js',
+        chunkFilename: '[name].[runtime].js',
     },
     resolve: {
         extensions: ['.js', '.jsx']
