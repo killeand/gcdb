@@ -4,10 +4,6 @@ import Express from 'express';
 import Session from 'express-session';
 import MongoStore from 'connect-mongo';
 import Mongoose from 'mongoose';
-import Webpack from 'webpack';
-import WebpackConfig from '../webpack.server';
-import HMRDevMiddle from 'webpack-dev-middleware';
-import HMRHotMiddle from 'webpack-hot-middleware';
 
 import ExpViews from './routes/ViewRoutes';
 import ExpModels from './routes/ModelRoutes';
@@ -48,12 +44,6 @@ Mongoose.connect(MONGO_STRING, { useNewUrlParser: true, useUnifiedTopology: true
         console.info(`Connected to MongoDB on ${Mongoose.connection.host}.`);
     }
 });
-
-const WPCompiler = Webpack(WebpackConfig);
-EXPRESS_APP.use(HMRDevMiddle(WPCompiler, {
-    publicPath: WebpackConfig.output.publicPath
-}));
-EXPRESS_APP.use(HMRHotMiddle(WPCompiler));
 
 EXPRESS_APP.use(ExpModels);
 EXPRESS_APP.use(ExpViews);

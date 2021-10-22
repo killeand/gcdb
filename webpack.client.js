@@ -5,6 +5,7 @@ const Path = require('path');
  
 module.exports = {
     mode: 'development',
+    target: 'web',
     entry: {
         client: [ './client/Main.js' ]
     },
