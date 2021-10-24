@@ -5,10 +5,10 @@ export default class Application extends Component {
     render() {
         return (
             <>
-                <header className="inline-flex flex-col bg-white border-r-2 border-b-2 border-gray-400 rounded-br-3xl">
-                    <div className="flex flex-col items-center justify-center m-2">
-                        <div className="flex flex-row text-4xl font-bold"><img src="images/icon.png" className="mr-3" />GCDB</div>
-                        <div className="text-xs font-bold">Game Character Database</div>
+                <header className="flex flex-col bg-white border-r-2 border-black">
+                    <div className="flex flex-row items-center px-2 py-1 bg-gray-400 text-white border-black border-b-2 border-r-2 rounded-br-3xl">
+                        <img src="images/icon.png" className="smallicon align-top mr-1" />
+                        <div className="text-xl font-bold">GCDB</div>
                     </div>
                     <nav>
 

@@ -12,3 +12,12 @@ html, body, #render-target {
 body {
     @apply bg-gray-700;
 }
+
+#render-target {
+    @apply flex flex-row;
+}
+
+.smallicon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
