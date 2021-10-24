@@ -5,15 +5,33 @@ export default class Application extends Component {
     render() {
         return (
             <>
-                <header className="flex flex-col bg-white border-r-2 border-black">
-                    <div className="flex flex-row items-center px-2 py-1 bg-gray-400 text-white border-black border-b-2 border-r-2 rounded-br-3xl">
-                        <img src="images/icon.png" className="smallicon align-top mr-1" />
-                        <div className="text-xl font-bold">GCDB</div>
-                    </div>
-                    <nav>
+                <BrowserRouter>
+                    <header className="flex flex-col items-start bg-gray-400 border-r-2 border-black">
+                        <Link to="/" className="inline-flex flex-row items-center px-2 py-1 bg-blue-700 text-white border-black border-b-2 border-r-2 rounded-br-3xl">
+                            <img src="images/icon.png" className="smallicon align-top mr-1" />
+                            <div className="text-xl font-bold">GCDB</div>
+                        </Link>
+                        <nav className="flex flex-col mt-3">
+                            <Link to="/">Lorem ipsum</Link>
+                            <Link to="/">dolor sit amet</Link>
+                            <Link to="/">consectetur</Link>
+                            <Link to="/">Aenean nunc</Link>
+                            <Link to="/">nec mollis urna</Link>
+                            <Link to="/">magna posuere</Link>
+                            <Link to="/">sit amet lectus</Link>
+                            <Link to="/">a volutpat</Link>
+                            <Link to="/">Maecenas et</Link>
+                        </nav>
+                    </header>
+                    <main className="flex flex-col flex-grow">
+                        <Switch>
 
-                    </nav>
-                </header>
+                        </Switch>
+                        <footer className="bg-gray-700">
+                            Stuff
+                        </footer>
+                    </main>
+                </BrowserRouter>
             </>
         );
     }

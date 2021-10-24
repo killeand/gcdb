@@ -10,7 +10,19 @@ html, body, #render-target {
 }
 
 body {
-    @apply bg-gray-700;
+    @apply bg-gray-200;
+}
+
+nav a {
+    @apply bg-white text-black px-3 py-1 border-b border-black font-bold;
+}
+
+nav a:first-child {
+    @apply border-t border-black;
+}
+
+nav a:hover {
+    @apply bg-blue-700 text-white;
 }
 
 #render-target {
