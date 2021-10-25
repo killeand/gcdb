@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 
 export default class Application extends Component {
     render() {
@@ -12,7 +12,7 @@ export default class Application extends Component {
                             <div className="text-xl font-bold">GCDB</div>
                         </Link>
                         <nav className="flex flex-col mt-3">
-                            <Link to="/">Lorem ipsum</Link>
+                            <Link to="/" className="bi-alarm"> Lorem ipsum</Link>
                             <Link to="/">dolor sit amet</Link>
                             <Link to="/">consectetur</Link>
                             <Link to="/">Aenean nunc</Link>
@@ -25,9 +25,11 @@ export default class Application extends Component {
                     </header>
                     <main className="flex flex-col flex-grow">
                         <Switch>
-
+                            <Route exact path="/">Home</Route>
+                            <Route exact path="/404">Page not found</Route>
+                            <Route><Redirect to="/404" /></Route>
                         </Switch>
-                        <footer className="bg-gray-700">
+                        <footer className="bg-gray-300">
                             Stuff
                         </footer>
                     </main>
