@@ -10,7 +10,7 @@ html, body, #render-target {
 }
 
 body {
-    @apply bg-white;
+    @apply bg-gray-300;
 }
 
 aside nav a {
@@ -18,7 +18,7 @@ aside nav a {
 }
 
 aside nav a:last-child {
-    @apply rounded-br-3xl;
+    @apply md:rounded-br-3xl;
 }
 
 aside nav a:hover {
