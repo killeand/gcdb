@@ -10,23 +10,23 @@ html, body, #render-target {
 }
 
 body {
-    @apply bg-gray-200;
+    @apply bg-white;
 }
 
-nav a {
-    @apply bg-white text-black px-3 py-1 border-b border-black font-bold;
+aside nav a {
+    @apply bg-gradient-to-b from-white to-gray-300 text-black px-3 py-1 border-b border-black font-bold;
 }
 
-nav a:first-child {
-    @apply border-t border-black;
+aside nav a:last-child {
+    @apply rounded-br-3xl;
 }
 
-nav a:hover {
-    @apply bg-blue-700 text-white;
+aside nav a:hover {
+    @apply bg-gradient-to-b from-blue-700 to-black text-white;
 }
 
-#render-target {
-    @apply flex flex-row;
+p {
+    @apply mb-3;
 }
 
 .smallicon {
