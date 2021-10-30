@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Group from '../components/Group';
 import Alert from '../components/Alert';
+import Button from '../components/Button';
 
 export default class Login extends Component {
     state = {
@@ -54,7 +55,7 @@ export default class Login extends Component {
         return (
             <>
                 {this.RenderAlerts()}
-                <form className="flex flex-col space-y-2 p-5 border border-black bg-blue-300 rounded-md" onSubmit={this.HandleLogin.bind(this)}>
+                <form className="flex flex-col space-y-2 mx-auto w-full md:w-1/2 p-5 border border-black bg-gray-200 md:rounded-md" onSubmit={this.HandleLogin.bind(this)}>
                     <Group>
                         <Group.Pre>
                             <Group.Label htmlFor="username">Username:</Group.Label>
@@ -72,7 +73,10 @@ export default class Login extends Component {
                         </Group.Post>
                     </Group>
                     <div className="text-center">
-                        <button>Login</button>
+                    <Button color="red">Login</Button>
+                    <Button color="green" as={Link} to="/">Login</Button>
+                    <Button color="blue">Login</Button>
+                    <Button color="white">Login</Button>
                     </div>
                 </form>
             </>

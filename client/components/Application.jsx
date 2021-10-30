@@ -47,7 +47,7 @@ export default class Application extends Component {
                                 {this.RenderLoggedInLinks()}
                             </nav>
                         </aside>
-                        <div className={"m-2 " + ((this.state.showMenu)?"md:w-5/6 w-full":"w-full") }>
+                        <div className={"md:m-2 " + ((this.state.showMenu)?"md:w-5/6 w-full":"w-full") }>
                             <Switch>
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/login" component={Login} />
