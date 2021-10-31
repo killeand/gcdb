@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { findDOMNode } from 'react-dom';
+import { Redirect } from 'react-router-dom';
 import Group from '../components/Group';
 import Alert from '../components/Alert';
 import Button from '../components/Button';
@@ -17,24 +18,28 @@ export default class Login extends Component {
 
     HandleLogin(e) {
         e.preventDefault();
-
-        // window.Socket.emit(
-        //     "/auth/login",
-        //     {
-        //         Email: this.FormInputs.Username.current.value,
-        //         Password: this.FormInputs.Password.current.value 
-        //     }, 
-        //     (res) => {
-        //         if (res.code == 0) {
-        //             window.User = { Token: res.response };
-
-        //             this.setState({LoginSuccess: true});
-        //         }
-        //         else {
-        //             this.setState({ErrorMsg: `(${res.code}) ${res.response}`})
-        //         }
-        //     }
-        // );
+        
+        fetch("/data/v1/users/list/all", {
+            headers: {
+                "content-type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({})
+        }).then((response, error) => {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                return response.json();
+            }
+        }).then((data, error) => {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log(data);
+            }
+        });
     }
 
     RenderAlerts() {
@@ -73,10 +78,7 @@ export default class Login extends Component {
                         </Group.Post>
                     </Group>
                     <div className="text-center">
-                    <Button color="red">Login</Button>
-                    <Button color="green" as={Link} to="/">Login</Button>
-                    <Button color="blue">Login</Button>
-                    <Button color="white">Login</Button>
+                        <Button color="blue" className="border border-black rounded-xl" onClick={this.HandleLogin.bind(this)}>Login</Button>
                     </div>
                 </form>
             </>

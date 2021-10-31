@@ -1,31 +1,11 @@
 import Express from 'express';
-import BCrypt from 'bcrypt';
 import _ from 'lodash';
 
-import Users from '../models/Users';
-import LoginTokens from '../models/LoginTokens';
+import Users from '../../../models/Users';
 
-const MODEL_ROUTES = Express.Router();
+const ROUTE = Express.Router();
 
-MODEL_ROUTES.get("/setup", (req, res, next) => {
-    Users.deleteMany({}, (err) => { if (err) console.error(err); });
-    LoginTokens.deleteMany({}, (err) => { if (err) console.error(err); });
-
-    let GenSalt = BCrypt.genSaltSync(12);
-    let GenPass = BCrypt.hashSync("admin", GenSalt);
-
-    Users.insertMany({
-        DisplayName: "Killean",
-        Email: "killean@shaw.ca",
-        Password: GenPass,
-        Salt: GenSalt,
-        Friends: []
-    }, {}, (err, resp) => { if (err) console.error(err); if (resp) res.send("App is set up..."); });
-
-    return;
-});
-
-MODEL_ROUTES.post("/data/users", Express.json(), (req, res, next) => {
+ROUTE.post("/all", Express.json(), (req, res, next) => {
     if (req.headers["content-type"] != "application/json") {
         res.status(400).contentType("application/json").send({"error": "Request must be supplied as a content type of application/json"});
         return;
@@ -60,4 +40,4 @@ MODEL_ROUTES.post("/data/users", Express.json(), (req, res, next) => {
     }
 });
 
-export default MODEL_ROUTES;
+export default ROUTE;

@@ -5,8 +5,7 @@ import Session from 'express-session';
 import MongoStore from 'connect-mongo';
 import Mongoose from 'mongoose';
 
-import ExpViews from './routes/ViewRoutes';
-import ExpModels from './routes/ModelRoutes';
+import Routes from './routes/Routes';
  
 const EXPRESS_APP = Express();
 const PORT = 3000;
@@ -45,6 +44,5 @@ Mongoose.connect(MONGO_STRING, { useNewUrlParser: true, useUnifiedTopology: true
     }
 });
 
-EXPRESS_APP.use(ExpModels);
-EXPRESS_APP.use(ExpViews);
+EXPRESS_APP.use(Routes);
 EXPRESS_APP.use(SESSION_DATA);

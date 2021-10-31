@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 
+import Button from './Button';
+
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import PageNotFound from '../pages/PageNotFound';
@@ -14,16 +16,16 @@ export default class Application extends Component {
         if (window.User) {
             return (
                 <>
-                    <Link to="/blahblah" className="bi-question-lg"> Blah Blah</Link>
-                    <Link to="/logout" className="bi-lock-fill"> Logout</Link>
+                    <Button as={Link} to="/blahblah" className="bi-question-lg"> Blah Blah</Button>
+                    <Button as={Link} to="/logout" className="bi-lock-fill"> Logout</Button>
                 </>
             );
         }
         else {
             return (
                 <>
-                    <Link to="/blahblah" className="bi-question-lg"> Blah Blah</Link>
-                    <Link to="/login" className="bi-key-fill"> Login</Link>
+                    <Button as={Link} to="/blahblah" className="bi-question-lg"> Blah Blah</Button>
+                    <Button as={Link} to="/login" className="bi-key-fill"> Login</Button>
                 </>
             );
         }
@@ -34,7 +36,7 @@ export default class Application extends Component {
             <>
                 <BrowserRouter>
                     <header className="flex bg-gradient-to-b from-gray-300 to-gray-500 text-white border-b border-black">
-                        <button className="bi-list m-2 text-xl font-bold " onClick={() => this.setState({showMenu: !this.state.showMenu})} />
+                        <Button className="bi-list m-1 text-xl font-bold text-black border border-black rounded-xl" onClick={() => this.setState({showMenu: !this.state.showMenu})} />
                         <Link to="/" className="flex flex-row items-center">
                             <img src="images/icon.png" className="smallicon align-top mr-1" />
                             <div className="text-xl font-bold mr-2">Game Character Database</div>
@@ -43,7 +45,7 @@ export default class Application extends Component {
                     <main className="flex flex-col md:flex-row bg-white">
                         <aside className={"md:w-1/6 w-full " + ((this.state.showMenu)?"hidden md:block":"block md:hidden")}>
                             <nav className="flex flex-col md:border-r-2 md:border-black md:rounded-br-3xl">
-                                <Link to="/" className="bi-house-fill"> Home</Link>
+                                <Button as={Link} to="/" className="bi-house-fill"> Home</Button>
                                 {this.RenderLoggedInLinks()}
                             </nav>
                         </aside>
