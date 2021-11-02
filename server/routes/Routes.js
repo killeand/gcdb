@@ -5,9 +5,11 @@ import _ from 'lodash';
 
 import DataRoot from './data/Main';
 import NotFound from './data/EndpointNotFound';
+import ContentRequest from './data/ContentRequest';
 
 const ROUTES = Express.Router();
 
+ROUTES.use("/data", ContentRequest);
 ROUTES.use("/data/v1", DataRoot);
 ROUTES.use("/data", NotFound);
 
