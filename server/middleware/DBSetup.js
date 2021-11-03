@@ -1,12 +1,9 @@
-import Express from 'express';
 import BCrypt from 'bcrypt';
 
-import Users from '../../models/Users';
-import LoginTokens from '../../models/LoginTokens';
+import Users from '../models/Users';
+import LoginTokens from '../models/LoginTokens';
 
-const SETUP_ROUTES = Express.Router();
-
-SETUP_ROUTES.get("/setup", (req, res, next) => {
+const DB_SETUP = () => (req, res, next) => {
     Users.deleteMany({}, (err) => { if (err) console.error(err); });
     LoginTokens.deleteMany({}, (err) => { if (err) console.error(err); });
 
@@ -22,6 +19,6 @@ SETUP_ROUTES.get("/setup", (req, res, next) => {
     }, {}, (err, resp) => { if (err) console.error(err); if (resp) res.send("App is set up..."); });
 
     return;
-});
+};
 
-export default SETUP_ROUTES;
+export default DB_SETUP;

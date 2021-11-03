@@ -19,7 +19,7 @@ export default class Login extends Component {
     HandleLogin(e) {
         e.preventDefault();
         
-        fetch("/data/v1/users/list/all", {
+        fetch("/data/v1/users/read", {
             headers: {
                 "content-type": "application/json"
             },

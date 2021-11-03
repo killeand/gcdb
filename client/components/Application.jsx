@@ -5,6 +5,7 @@ import Button from './Button';
 
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import ExecuteAPI from '../pages/ExecuteAPI';
 import PageNotFound from '../pages/PageNotFound';
 
 export default class Application extends Component {
@@ -53,6 +54,7 @@ export default class Application extends Component {
                             <Switch>
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/login" component={Login} />
+                                <Route exact path="/exe" component={ExecuteAPI} />
                                 <Route exact path="/404" component={PageNotFound} />
                                 <Route><Redirect to="/404" /></Route>
                             </Switch>

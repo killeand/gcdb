@@ -53,6 +53,20 @@ export class GroupText extends Component {
     }
 }
 
+export class GroupSelect extends Component {
+    render() {
+        let classProp = (_.has(this.props, "className")) ? this.props.className : "";
+        let newProps = this.props;
+        _.unset(newProps, "className");
+
+        return (
+            <select
+            {...newProps}
+            className={classProp + " flex-grow"}
+        />);
+    }
+}
+
 export class GroupInput extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
@@ -142,6 +156,7 @@ Group.Title = GroupTitle;
 Group.Label = GroupLabel;
 Group.Text = GroupText;
 Group.Input = GroupInput;
+Group.Select = GroupSelect;
 Group.Pre = GroupPre;
 Group.Post = GroupPost;
 

@@ -23,9 +23,11 @@ export default class Alert extends Component {
     }
 
     render() {
+        let classProp = (_.has(this.props, "className")) ? this.props.className : "";
+
         return (
             <>
-                <div className={((this.props.className)?this.props.className:"") + this.GetBG() + " mx-5 my-1 p-2 font-bold rounded-md"}>{this.props.children}</div>
+                <div className={classProp + this.GetBG() + " mx-5 my-1 p-2 font-bold rounded-md"}>{this.props.children}</div>
             </>
         );
     }

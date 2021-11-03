@@ -1,0 +1,6 @@
+/data/v1
+        /setup              - DB Setup
+        /users
+                /auth       - Login routine
+                /check      - Token check
+                /read       - Load list of users, load by email

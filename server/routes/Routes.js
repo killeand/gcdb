@@ -4,14 +4,14 @@ import FS from 'fs';
 import _ from 'lodash';
 
 import DataRoot from './data/Main';
-import NotFound from './data/EndpointNotFound';
-import ContentRequest from './data/ContentRequest';
+import NotFound from '../middleware/EndpointNotFound';
+import CTRequire from '../middleware/ContentTypeRequire';
 
 const ROUTES = Express.Router();
 
-ROUTES.use("/data", ContentRequest);
+ROUTES.use("/data", CTRequire());
 ROUTES.use("/data/v1", DataRoot);
-ROUTES.use("/data", NotFound);
+ROUTES.use("/data", NotFound());
 
 ROUTES.get(/^[^\.]*$/, (req, res, next) => {
     res.sendFile(Path.resolve('./build/main.html'));
