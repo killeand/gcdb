@@ -17,7 +17,7 @@ export default class Application extends Component {
         if (window.User) {
             return (
                 <>
-                    <Button as={Link} to="/blahblah" className="bi-question-lg"> Blah Blah</Button>
+                    <Button as={Link} to="/exe" className="bi-question-lg"> Blah Blah</Button>
                     <Button as={Link} to="/logout" className="bi-lock-fill"> Logout</Button>
                 </>
             );
@@ -25,7 +25,7 @@ export default class Application extends Component {
         else {
             return (
                 <>
-                    <Button as={Link} to="/blahblah" className="bi-question-lg"> Blah Blah</Button>
+                    <Button as={Link} to="/exe" className="bi-question-lg"> Blah Blah</Button>
                     <Button as={Link} to="/login" className="bi-key-fill"> Login</Button>
                 </>
             );

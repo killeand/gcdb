@@ -21,7 +21,10 @@ const SESSION_DATA = Session({
         crypto: {
             secret: "$2y$12$BVIsGB3pgMlgz3gles4JoefdaRBGhlNnnbhqEmOK4G7ohGc10r0R."
         }
-    })
+    }),
+    cookie: {
+        secure: true
+    }
 });
 
 HTTPs.createServer(SSL_CERTS, EXPRESS_APP).listen(PORT, (error) => {
@@ -44,5 +47,5 @@ Mongoose.connect(MONGO_STRING, { useNewUrlParser: true, useUnifiedTopology: true
     }
 });
 
-EXPRESS_APP.use(Routes);
 EXPRESS_APP.use(SESSION_DATA);
+EXPRESS_APP.use(Routes);

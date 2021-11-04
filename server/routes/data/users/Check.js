@@ -7,7 +7,12 @@ import LoginTokens from '../../../models/LoginTokens';
 const ROUTE = Express.Router();
 
 ROUTE.post(/^.*$/, Express.json(), (req, res, next) => {
-    return;
+    if (req.session.Token) {
+        
+    }
+    else {
+        res.status(200).contentType("application/json").send({"code":1,"error":"Not logged in"})
+    }
 });
 
 export default ROUTE;
