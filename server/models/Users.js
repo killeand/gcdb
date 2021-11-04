@@ -5,7 +5,8 @@ var UsersSchema = new Mongoose.Schema({
     Email: String,
     Password: String,
     Salt: String,
-    Friends: [String]
+    Friends: [String],
+    Perms: Number
 });
 
 var Users = Mongoose.model("Users", UsersSchema, "Users");

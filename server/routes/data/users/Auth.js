@@ -7,7 +7,7 @@ import LoginTokens from '../../../models/LoginTokens';
 
 const ROUTE = Express.Router();
 
-ROUTE.post(/^.*$/, Express.json(), (req, res, next) => {
+ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
     if (!_.isEmpty(req.body)) {
         let missingfields = "";
         if (!req.body.Email) missingfields += "Email address "
@@ -16,6 +16,9 @@ ROUTE.post(/^.*$/, Express.json(), (req, res, next) => {
             res.status(400).contentType("application/json").send({"code":1,"error":"The following fields are missing: " + missingfields});
             return;
         }
+
+        let test = await Users.find({Email: "blah"}, { Cheese: 1, Email: 1});
+        console.log(test);
 
         Users.findOne({Email: req.body.Email}, (error, user_doc) => {
             if (error) {

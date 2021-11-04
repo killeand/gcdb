@@ -4,7 +4,9 @@ import Express from 'express';
 import Session from 'express-session';
 import MongoStore from 'connect-mongo';
 import Mongoose from 'mongoose';
+import Helmet from 'helmet';
 
+import RateLimiter from './middleware/RateLimiter';
 import Routes from './routes/Routes';
  
 const EXPRESS_APP = Express();
@@ -12,6 +14,7 @@ const PORT = 3000;
 const SSL_CERTS = { key: FS.readFileSync('./ssltls/key.pem', 'utf8'), cert: FS.readFileSync('./ssltls/cert.pem', 'utf8') }
 const MONGO_STRING = "mongodb://gcdb:gcdb@10.50.10.5:27000/gcdb?authSource=admin";
 const SESSION_DATA = Session({
+    name: "GCDBC",
     secret: "$2y$12$/PUHAESr9opxIaWE.x6e3.xmiTUnkr/BQwgNOg7uwviEy8zSfqci2",
     resave: false,
     saveUninitialized: false,
@@ -23,7 +26,11 @@ const SESSION_DATA = Session({
         }
     }),
     cookie: {
-        secure: true
+        secure: true,
+        httpOnly: true,
+        domain: "localhost",
+        path: "/",
+        maxAge: 120 * 1000
     }
 });
 
@@ -47,5 +54,9 @@ Mongoose.connect(MONGO_STRING, { useNewUrlParser: true, useUnifiedTopology: true
     }
 });
 
+EXPRESS_APP.use(Helmet({
+    contentSecurityPolicy: false
+}));
+EXPRESS_APP.use(RateLimiter);
 EXPRESS_APP.use(SESSION_DATA);
 EXPRESS_APP.use(Routes);

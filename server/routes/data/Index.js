@@ -1,7 +1,7 @@
 import Express from 'express';
 
 import DBSetup from '../../middleware/DBSetup';
-import UsersRoot from './users/Main';
+import UsersRoot from './users/Index';
 
 const DATA_ROUTES = Express.Router();
 

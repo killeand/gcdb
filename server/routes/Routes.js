@@ -3,7 +3,7 @@ import Path from 'path';
 import FS from 'fs';
 import _ from 'lodash';
 
-import DataRoot from './data/Main';
+import DataRoot from './data/Index';
 import NotFound from '../middleware/EndpointNotFound';
 import CTRequire from '../middleware/ContentTypeRequire';
 
