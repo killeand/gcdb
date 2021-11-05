@@ -7,7 +7,7 @@ import Mongoose from 'mongoose';
 import Helmet from 'helmet';
 
 import RateLimiter from './middleware/RateLimiter';
-import Routes from './routes/Routes';
+import Routes from './Routes';
  
 const EXPRESS_APP = Express();
 const PORT = 3000;

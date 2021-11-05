@@ -1,10 +1,10 @@
 import Express from 'express';
 import _ from 'lodash';
 
-import GetUserDetails from '../../../middleware/GetUserDetails';
+import GetUserDetails from '../../middleware/GetUserDetails';
 
-import Users from '../../../models/Users';
-import LoginTokens from '../../../models/LoginTokens';
+import Users from '../../models/Users';
+import LoginTokens from '../../models/LoginTokens';
 
 const ROUTE = Express.Router();
 
