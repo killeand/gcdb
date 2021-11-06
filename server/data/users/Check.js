@@ -8,7 +8,7 @@ import LoginTokens from '../../models/LoginTokens';
 
 const ROUTE = Express.Router();
 
-ROUTE.post(/^.*$/, GetUserDetails, Express.json(), (req, res, next) => {
+ROUTE.get(/^.*$/, GetUserDetails, Express.json(), (req, res, next) => {
     res.status(200).json(res.locals.UserDetails);
 });
 

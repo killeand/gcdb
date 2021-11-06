@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Group from '../components/Group';
 import Alert from '../components/Alert';
 import Button from '../components/Button';
@@ -54,7 +54,7 @@ export default class Login extends Component {
 
     render() {
         if (this.state.LoginSuccess) {
-            return (<Redirect to="/" />);
+            return (<Navigate to="/" replace={true} />);
         }
 
         return (

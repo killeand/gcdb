@@ -36,7 +36,7 @@ ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
         return;
     }
 
-    if (BCrypt.hashSync(req.body.Password, user_doc.Salt) != user_doc.Password) {
+    if (BCrypt.hashSync(req.body.Password, UserDoc.Salt) != UserDoc.Password) {
         res.json({code:5, error:"Invalid username and password combination"});
         return;
     }
