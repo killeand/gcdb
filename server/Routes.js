@@ -19,8 +19,28 @@ ROUTES.get(/^[^\.]*$/, (req, res, next) => {
 });
 
 ROUTES.get(/^.*$/, (req, res, next) => {
-    if (FS.existsSync(Path.resolve("./build" + req.path))) {
-        res.sendFile(Path.resolve("./build" + req.path));
+    let path = req.path;
+    let reserved_paths = ["images"];
+    let changed = false;
+
+    for (let i = 0; i < reserved_paths.length; i++) {
+        let regex = new RegExp(`^(.*)${reserved_paths[i]}(.*)$`);
+
+        if (regex.test(path)) {
+            let index = path.indexOf(reserved_paths[i]);
+            path = path.substr(index - 1);
+            changed = true;
+        }
+    }
+
+    if (!changed) {
+        let index = path.lastIndexOf("/");
+
+        path = path.substr(index);
+    }
+
+    if (FS.existsSync(Path.resolve("./build" + path))) {
+        res.sendFile(Path.resolve("./build" + path));
         return;
     }
     else {

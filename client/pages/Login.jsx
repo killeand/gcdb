@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { Navigate } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+
 import Group from '../components/Group';
 import Alert from '../components/Alert';
 import Button from '../components/Button';
@@ -53,8 +54,9 @@ export default class Login extends Component {
     }
 
     render() {
+        console.log(this.props);
         if (this.state.LoginSuccess) {
-            return (<Navigate to="/" replace={true} />);
+            return (<Redirect to="/" />);
         }
 
         return (

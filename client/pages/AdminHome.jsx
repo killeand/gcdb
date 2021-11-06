@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withAuth, { withAuth2, withRouter } from '../scripts/withAuth';
+import withAuth from '../scripts/withAuth';
 
 class AdminHome extends Component {
     state = {
@@ -7,6 +7,7 @@ class AdminHome extends Component {
     };
 
     render() {
+        console.warn(this.props);
         return (
             <>
                 Welcome to the Admin site
@@ -15,4 +16,4 @@ class AdminHome extends Component {
     }
 }
 
-export default withAuth2()(AdminHome);
+export default withAuth()(AdminHome);

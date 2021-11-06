@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 
 import UserPerms from '../scripts/UserPerms';
@@ -61,15 +61,16 @@ export default class Application extends Component {
                             </nav>
                         </aside>
                         <div className={"md:m-2 " + ((this.state.ShowMenu)?"md:w-5/6 w-full":"w-full") }>
-                            <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="login" element={<Login />} />
-                                <Route path="admin" element={<AdminHome />}>
-                                    <Route path="exe" element={<ExecuteAPI />} />
+                            <Switch>
+                                <Route exact path="/" component={Home} />
+                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/admin" component={AdminHome} />
+                                <Route exact path="/admin/exe" component={ExecuteAPI} />
+                                <Route exact path="/404" component={PageNotFound} />
+                                <Route>
+                                    <Redirect to="/404" />
                                 </Route>
-                                <Route path="404" element={<PageNotFound />} />
-                                <Route path="*" element={<Navigate to="/404" replace={true} />} />
-                            </Routes>
+                            </Switch>
                         </div>
                     </main>
                     <footer className="flex bg-gradient-to-b from-white to-gray-300 p-1 justify-center">
