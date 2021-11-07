@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import _ from 'lodash';
 
+import Loading from '../components/Loading';
+
 export default function withAuth(newProps, permission) {
     return (AuthedPage) => {
         return class AuthedComponent extends Component {
@@ -28,7 +30,7 @@ export default function withAuth(newProps, permission) {
             render() {
                 if (!this.state.Loaded) {
                     return (
-                        <p>Loading...</p>
+                        <Loading />
                     );
                 }
 

@@ -11,6 +11,7 @@ import Login from '../pages/Login';
 import ExecuteAPI from '../pages/ExecuteAPI';
 import AdminHome from '../pages/AdminHome';
 import PageNotFound from '../pages/PageNotFound';
+import Tools from '../pages/Tools';
 
 export default class Application extends Component {
     state = {
@@ -18,17 +19,35 @@ export default class Application extends Component {
         UserData: null
     };
 
+    LoadUserDetails() {
+        fetch("/data/v1/users/check", {
+            method: "GET",
+            headers: {
+                "content-type": "application/json"
+            }
+        }).then((response, error) => {
+            if (response)
+                return response.json();
+        }).then((data, error) => {
+            if (data) {
+                this.setState({UserData:data});
+                setTimeout(this.LoadUserDetails, 60 * 1000);
+            }
+        });
+    }
+
     RenderLoggedInLinks() {
         let MenuButtons = [];
 
         MenuButtons.push(<Button key="menu1" as={Link} to="/" className="bi-house-fill"> Home</Button>);
+        MenuButtons.push(<Button key="menu2" as={Link} to="/tools" className="bi-screwdriver"> Tools</Button>);
 
         if (!_.isEmpty(this.state.UserData)) {
             if ((this.state.UserData.Perms & UserPerms.Admin) == UserPerms.Admin) {
-                MenuButtons.push(<Button key="menu2" as={Link} to="/admin" className="bi-gear"> Admin</Button>);
+                MenuButtons.push(<Button key="menu3" as={Link} to="/admin" className="bi-gear"> Admin</Button>);
 
                 if ((this.state.UserData.Perms & UserPerms.Admin) == UserPerms.Admin) {
-                    MenuButtons.push(<Button key="menu3" as={Link} to="/admin/exe" className="bi-terminal">     Execute</Button>);
+                    MenuButtons.push(<Button key="menu4" as={Link} to="/admin/exe" className="bi-terminal">     Execute</Button>);
                 }
             }
         }
@@ -63,9 +82,10 @@ export default class Application extends Component {
                         <div className={"md:m-2 " + ((this.state.ShowMenu)?"md:w-5/6 w-full":"w-full") }>
                             <Switch>
                                 <Route exact path="/" component={Home} />
-                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/login" render={(props) => (<Login {...props} onLogin={this.LoadUserDetails.bind(this)} />)} />
                                 <Route exact path="/admin" component={AdminHome} />
                                 <Route exact path="/admin/exe" component={ExecuteAPI} />
+                                <Route exact path="/tools" component={Tools} />
                                 <Route exact path="/404" component={PageNotFound} />
                                 <Route>
                                     <Redirect to="/404" />

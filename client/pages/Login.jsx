@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Redirect } from 'react-router-dom';
+import _ from 'lodash';
 
 import Group from '../components/Group';
 import Alert from '../components/Alert';
@@ -25,20 +26,17 @@ export default class Login extends Component {
                 "content-type": "application/json"
             },
             method: "POST",
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                Email:findDOMNode(this.formInputs.Username.current).value,
+                Password:findDOMNode(this.formInputs.Password.current).value
+            })
         }).then((response, error) => {
-            if (error) {
-                console.log(error);
-            }
-            else {
+            if (response)
                 return response.json();
-            }
         }).then((data, error) => {
-            if (error) {
-                console.log(error);
-            }
-            else {
-                console.log(data);
+            if (data) {
+                this.setState({LoginSuccess:true});
+                this.props.onLogin();
             }
         });
     }
@@ -56,7 +54,10 @@ export default class Login extends Component {
     render() {
         console.log(this.props);
         if (this.state.LoginSuccess) {
-            return (<Redirect to="/" />);
+            if (_.has(this.props, "location.state.returnpath"))
+                return (<Redirect to={this.props.location.state.returnpath} />);
+            else
+                return (<Redirect to="/" />);
         }
 
         return (
