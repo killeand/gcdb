@@ -69,7 +69,7 @@ export default class Application extends Component {
                     <header className="flex bg-gradient-to-b from-gray-300 to-gray-500 text-white border-b border-black">
                         <Button className="bi-list m-1 text-xl font-bold text-black border border-black rounded-xl" onClick={() => this.setState({ShowMenu: !this.state.ShowMenu})} />
                         <Link to="/" className="flex flex-row items-center">
-                            <img src="images/icon.png" className="smallicon align-top mr-1" />
+                            <img src="/src/images/icon.png" className="smallicon align-top mr-1" />
                             <div className="text-xl font-bold mr-2">Game Character Database</div>
                         </Link>
                     </header>

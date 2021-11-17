@@ -4,11 +4,21 @@ import _ from 'lodash';
 export default class Group extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
-        let newProps = this.props;
+        let classChildren = _.cloneDeep(this.props.children);
+        let newProps = _.cloneDeep(this.props);
+        let newChildren = [];
         _.unset(newProps, "className");
+        _.unset(newProps, "children");
+
+        for (let i = 0; i < classChildren.length; i++) {
+            newChildren.push(React.cloneElement(classChildren[i], {key:"grp"+i, ...classChildren[i].props}));
+        }
+
+        console.log(newChildren);
 
         return (<div 
             {...newProps}
+            children={newChildren}
             className={classProp + " flex flex-row"}
         />);
     }
@@ -17,7 +27,7 @@ export default class Group extends Component {
 export class GroupTitle extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
-        let newProps = this.props;
+        let newProps = _.cloneDeep(this.props);
         _.unset(newProps, "className");
 
         return (<div
@@ -30,7 +40,7 @@ export class GroupTitle extends Component {
 export class GroupLabel extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
-        let newProps = this.props;
+        let newProps = _.cloneDeep(this.props);
         _.unset(newProps, "className");
 
         return (<label
@@ -43,7 +53,7 @@ export class GroupLabel extends Component {
 export class GroupText extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
-        let newProps = this.props;
+        let newProps = _.cloneDeep(this.props);
         _.unset(newProps, "className");
 
         return (<div
@@ -56,7 +66,7 @@ export class GroupText extends Component {
 export class GroupSelect extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
-        let newProps = this.props;
+        let newProps = _.cloneDeep(this.props);
         _.unset(newProps, "className");
 
         return (
@@ -71,7 +81,7 @@ export class GroupInput extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
         let typeProp = (_.has(this.props, "type")) ? this.props.type : "text";
-        let newProps = this.props;
+        let newProps = _.cloneDeep(this.props);
         _.unset(newProps, "className");
         _.unset(newProps, "type");
 

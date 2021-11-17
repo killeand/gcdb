@@ -5,7 +5,7 @@ export default class Button extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
         let newType = (_.has(this.props, "as")) ? this.props.as : null;
-        let newProps = this.props;
+        let newProps = _.cloneDeep(this.props);
         _.unset(newProps, "className");
         _.unset(newProps, "as");
 
