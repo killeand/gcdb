@@ -14,8 +14,6 @@ export default class Group extends Component {
             newChildren.push(React.cloneElement(classChildren[i], {key:"grp"+i, ...classChildren[i].props}));
         }
 
-        console.log(newChildren);
-
         return (<div 
             {...newProps}
             children={newChildren}
@@ -66,12 +64,20 @@ export class GroupText extends Component {
 export class GroupSelect extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
+        let classChildren = _.cloneDeep(this.props.children);
         let newProps = _.cloneDeep(this.props);
+        let newChildren = [];
         _.unset(newProps, "className");
+        _.unset(newProps, "children");
+
+        for (let i = 0; i < classChildren.length; i++) {
+            newChildren.push(React.cloneElement(classChildren[i], {key:"grp"+i, ...classChildren[i].props}));
+        }
 
         return (
             <select
             {...newProps}
+            children={newChildren}
             className={classProp + " flex-grow"}
         />);
     }

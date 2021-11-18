@@ -20,8 +20,10 @@ export default class Login extends Component {
 
     HandleLogin(e) {
         e.preventDefault();
+
+        console.log(this.formInputs);
         
-        fetch("/data/v1/users/auth", {
+        fetch(":4000/data/v1/users/auth", {
             headers: {
                 "content-type": "application/json"
             },
@@ -52,7 +54,6 @@ export default class Login extends Component {
     }
 
     render() {
-        console.log(this.props);
         if (this.state.LoginSuccess) {
             if (_.has(this.props, "location.state.returnpath"))
                 return (<Redirect to={this.props.location.state.returnpath} />);
