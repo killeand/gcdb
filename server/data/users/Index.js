@@ -1,8 +1,8 @@
 import Express from 'express';
 
-import Read from './Read';
-import Auth from './Auth';
-import Check from './Check';
+import Read from './Read.js';
+import Auth from './Auth.js';
+import Check from './Check.js';
 
 const USERS_ROUTE = Express.Router();
 

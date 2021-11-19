@@ -21,19 +21,28 @@ export default class Login extends Component {
     HandleLogin(e) {
         e.preventDefault();
 
-        console.log(this.formInputs);
+        let username = findDOMNode(this.formInputs.Username).value;
+        let password = findDOMNode(this.formInputs.Password).value;
+
+        if (username == "" || password == "") {
+            this.setState({ErrorMsg: "Values must not be empty..."});
+            return;
+        }
         
-        fetch(":4000/data/v1/users/auth", {
+        fetch("/data/v1/users/auth", {
             headers: {
                 "content-type": "application/json"
             },
             method: "POST",
             body: JSON.stringify({
-                Email:findDOMNode(this.formInputs.Username.current).value,
-                Password:findDOMNode(this.formInputs.Password.current).value
+                Email:findDOMNode(this.formInputs.Username).value,
+                Password:findDOMNode(this.formInputs.Password).value
             })
         }).then((response, error) => {
-            if (response)
+            console.log(response.body.getReader());
+            if (error)
+                this.setState({ErrorMsg:"Authentication server error"});
+            else if (response)
                 return response.json();
         }).then((data, error) => {
             if (data) {
@@ -70,7 +79,7 @@ export default class Login extends Component {
                             <Group.Label htmlFor="username">Username:</Group.Label>
                         </Group.Pre>
                         <Group.Post>
-                            <Group.Input id="username" type="text" ref={this.formInputs.Username} />
+                            <Group.Input id="username" type="text" ref={(obj) => this.formInputs.Username = obj} />
                         </Group.Post>
                     </Group>
                     <Group>
@@ -78,11 +87,11 @@ export default class Login extends Component {
                             <Group.Label htmlFor="password">Password:</Group.Label>
                         </Group.Pre>
                         <Group.Post>
-                            <Group.Input id="password" type="password" ref={this.formInputs.Password} />
+                            <Group.Input id="password" type="password" ref={(obj) => this.formInputs.Password = obj} />
                         </Group.Post>
                     </Group>
                     <div className="text-center">
-                        <Button color="blue" className="border border-black rounded-xl" onClick={this.HandleLogin.bind(this)}>Login</Button>
+                        <Button color="blue" className="border border-black rounded-xl">Login</Button>
                     </div>
                 </form>
             </>

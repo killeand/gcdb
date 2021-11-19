@@ -2,8 +2,8 @@ import Express from 'express';
 import _ from 'lodash';
 import BCrypt from 'bcrypt';
 
-import Users from '../../models/Users';
-import LoginTokens from '../../models/LoginTokens';
+import Users from '../../models/Users.js';
+import LoginTokens from '../../models/LoginTokens.js';
 
 const ROUTE = Express.Router();
 

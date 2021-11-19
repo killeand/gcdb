@@ -1,5 +1,5 @@
-import Users from '../models/Users';
-import LoginTokens from '../models/LoginTokens';
+import Users from '../models/Users.js';
+import LoginTokens from '../models/LoginTokens.js';
 
 const GetUserDetails = async (req, res, next) => {
     // Load Session Token

@@ -6,11 +6,11 @@ import MongoStore from 'connect-mongo';
 import Mongoose from 'mongoose';
 import Helmet from 'helmet';
 
-import RateLimiter from './middleware/RateLimiter';
-import Routes from './Routes';
+import RateLimiter from './middleware/RateLimiter.js';
+import Routes from './Routes.js';
  
 const EXPRESS_APP = Express();
-const PORT = 3000;
+const PORT = 4000;
 const SSL_CERTS = { key: FS.readFileSync('./ssltls/key.pem', 'utf8'), cert: FS.readFileSync('./ssltls/cert.pem', 'utf8') }
 const MONGO_STRING = "mongodb://gcdb:gcdb@10.50.10.5:27000/gcdb?authSource=admin";
 const SESSION_DATA = Session({

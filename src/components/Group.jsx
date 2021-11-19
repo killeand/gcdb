@@ -91,7 +91,8 @@ export class GroupInput extends Component {
         _.unset(newProps, "className");
         _.unset(newProps, "type");
 
-        return (<input
+        return (
+            <input
             {...newProps}
             type={typeProp}
             className={classProp + " flex-grow w-full px-2"}

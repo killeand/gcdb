@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 export default class Alert extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-
-        }
-    }
-
     GetBG() {
         switch (this.props.type) {
             case "error":

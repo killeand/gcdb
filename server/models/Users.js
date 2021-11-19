@@ -1,6 +1,6 @@
-const Mongoose = require("mongoose");
+import Mongoose from 'mongoose';
 
-var UsersSchema = new Mongoose.Schema({
+let UsersSchema = new Mongoose.Schema({
     DisplayName: String,
     Email: String,
     Password: String,
@@ -9,6 +9,4 @@ var UsersSchema = new Mongoose.Schema({
     Perms: Number
 });
 
-var Users = Mongoose.model("Users", UsersSchema, "Users");
-
-module.exports = Users;
+export default Mongoose.model("Users", UsersSchema, "Users");

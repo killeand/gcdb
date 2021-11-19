@@ -11,5 +11,12 @@ export default defineConfig({
       key: fs.readFileSync('./ssltls/key.pem'),
       cert: fs.readFileSync('./ssltls/cert.pem'),
     },
+    proxy: {
+      '/data/v1/': {
+        secure: false,
+        target: "https://localhost:4000/",
+        changeOrigin: true
+      }
+    }
   }
 })
