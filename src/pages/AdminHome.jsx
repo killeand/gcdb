@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import withAuth from '../scripts/withAuth';
+import UserPerms from '../scripts/UserPerms';
 
 class AdminHome extends Component {
     state = {

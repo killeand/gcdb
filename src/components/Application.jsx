@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 
+import UserContext from './UserContext';
 import UserPerms from '../scripts/UserPerms';
 
 import Button from './Button';
@@ -14,12 +15,21 @@ import PageNotFound from '../pages/PageNotFound';
 import Tools from '../pages/Tools';
 
 export default class Application extends Component {
+    static contextType = UserContext;
+
     state = {
         ShowMenu: true,
         UserData: null
     };
 
-    LoadUserDetails() {
+    LoadUserDetails(globalPass) {
+        let AppComp = null;
+
+        if (_.has(this, "state.UserData"))
+            AppComp = this;
+        else
+            AppComp = globalPass;
+
         fetch("/data/v1/users/check", {
             method: "GET",
             headers: {
@@ -29,9 +39,12 @@ export default class Application extends Component {
             if (response)
                 return response.json();
         }).then((data, error) => {
-            if (data) {
-                this.setState({UserData:data});
-                setTimeout(this.LoadUserDetails, 60 * 1000);
+            if (_.has(data, "error"))
+                AppComp.setState({UserData:null});
+            else {
+                console.log(this.context);
+                this.context.setUser.setUser(data);
+                AppComp.setState({UserData:data});
             }
         });
     }
@@ -63,6 +76,7 @@ export default class Application extends Component {
     }
 
     render() {
+        console.log("render");
         return (
             <>
                 <BrowserRouter>

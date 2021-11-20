@@ -18,13 +18,29 @@ export default function withAuth(newProps, permission) {
                 }).then((response, error) => {
                     return response.json();
                 }).then((data, error) => {
-                    this.setState({Loaded:true, Data:((data.Perms & permission) == permission)});
+                    let allowed = 0;
+
+                    if (_.has(data, "error")) {
+                        allowed = 2;
+                    }
+                    else if (permission == undefined || permission == null)
+                        allowed = 1;
+                    else
+                        if (_.has(data, "Perms"))
+                            if ((data.Perms & permission) == permission)
+                                allowed = 1;
+                            else
+                                allowed = 3;
+                        else
+                            allowed = 2;
+
+                    this.setState({Loaded:true, Permit:allowed});
                 })
             }
             
             state = {
                 Loaded: false,
-                Data: null
+                Permit: null
             }
 
             render() {
@@ -34,14 +50,19 @@ export default function withAuth(newProps, permission) {
                     );
                 }
 
-                if (this.state.Data == true) {
+                if (this.state.Permit == 1) {
                     return (
                         <AuthedPage {...newProps} />
                     );
                 }
-                else {
+                else if (this.state.Permit == 2) {
                     return (
                         <Redirect to={{pathname:"/login", state:{returnpath:this.props.location.pathname+this.props.location.search}}} />
+                    );
+                }
+                else if (this.state.Permit == 3) {
+                    return (
+                        <p>You do not have permission to view this resource</p>
                     );
                 }
             }

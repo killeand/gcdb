@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
+import UserContext from '../components/UserContext';
 
 import Group from '../components/Group';
 import Alert from '../components/Alert';
 import Button from '../components/Button';
 
 export default class Login extends Component {
+    static contextType = UserContext;
+
     state = {
         ErrorMsg: null,
         LoginSuccess: false
@@ -39,16 +42,21 @@ export default class Login extends Component {
                 Password:findDOMNode(this.formInputs.Password).value
             })
         }).then((response, error) => {
-            console.log(response.body.getReader());
             if (error)
                 this.setState({ErrorMsg:"Authentication server error"});
             else if (response)
-                return response.json();
+                if (response.status == "200")
+                    return response.json();
+                else
+                    this.setState({ErrorMsg:"Authentication server error"});
         }).then((data, error) => {
-            if (data) {
+            if (_.has(data, "success")) {
                 this.setState({LoginSuccess:true});
-                this.props.onLogin();
+                this.context.setUser(data);
+                //this.props.onLogin();
             }
+            else if (_.has(data, "error"))
+                this.setState({ErrorMsg:data.error});
         });
     }
 
