@@ -16,7 +16,7 @@ const DB_SETUP = () => (req, res, next) => {
         Password: GenPass,
         Salt: GenSalt,
         Friends: [],
-        Perms: 0x1
+        Perms: 0x3
     }, {}, (err, resp) => { if (err) console.error(err); if (resp) res.send("App is set up..."); });
 
     return;

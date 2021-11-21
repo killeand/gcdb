@@ -30,7 +30,7 @@ const SESSION_DATA = Session({
         httpOnly: true,
         domain: "localhost",
         path: "/",
-        maxAge: 120 * 1000
+        maxAge: 24 * 60 * 60 * 1000
     }
 });
 

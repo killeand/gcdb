@@ -78,7 +78,7 @@ export class GroupSelect extends Component {
             <select
             {...newProps}
             children={newChildren}
-            className={classProp + " flex-grow"}
+            className={classProp + " flex-grow bg-white"}
         />);
     }
 }

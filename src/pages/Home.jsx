@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import UserContext from '../components/UserContext';
 
 export default class Home extends Component {
-    static contextType = UserContext;
-
     render() {
-        console.log(this);
         return (
             <>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris bibendum tortor at lacus feugiat commodo. Aliquam nec vestibulum lacus, a semper purus. Ut in nunc sapien. Nullam suscipit sollicitudin pharetra. Sed iaculis nulla in eros interdum, eu luctus dui volutpat. Nullam vulputate eget lacus ut semper. Praesent finibus tempus dapibus. Mauris dignissim tempus venenatis. Curabitur mollis id lorem in bibendum. Pellentesque non semper risus. Praesent euismod sit amet nisi vitae suscipit.</p>

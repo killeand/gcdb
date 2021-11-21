@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
+import withAuth from '../scripts/withAuth';
+import UserPerms from '../scripts/UserPerms';
 import _ from 'lodash';
-
+import $ from '../scripts/GCDBAPI';
 import Group from '../components/Group';
 import Button from '../components/Button';
 import Alert from '../components/Alert';
 
-export default class ExecuteAPI extends Component {
+class ExecuteAPI extends Component {
+    constructor(props) {
+        super(props);
+
+        this.pathKeys = this.ObjectToArray($.Path);
+    }
+
     state = {
         Data: [],
         ErrorMsg: "",
@@ -18,6 +26,21 @@ export default class ExecuteAPI extends Component {
         Path: React.createRef(),
         Method: React.createRef()
     };
+
+    ObjectToArray(nextLevel) {
+        let retval = [];
+
+        for (let i = 0; i < _.keys(nextLevel).length; i++) {
+            if (_.isObject(nextLevel[_.keys(nextLevel)[i]])) {
+                retval = _.concat(retval, this.ObjectToArray(nextLevel[_.keys(nextLevel)[i]]));
+            }
+            else {
+                retval.push(nextLevel[_.keys(nextLevel)[i]]);
+            }
+        }
+
+        return retval;
+    }
 
     ChangeKey(index, e) {
         let localData = this.state.Data;
@@ -55,48 +78,55 @@ export default class ExecuteAPI extends Component {
         });
 
         let exe = {
-            Path: findDOMNode(this.formRef.Path.current).value,
-            Method: findDOMNode(this.formRef.Method.current).value,
+            Path: findDOMNode(this.formRef.Path).value,
+            Method: findDOMNode(this.formRef.Method).value,
             Body: dataBuild
         };
 
         this.setState({Executing:JSON.stringify(exe, null, '\t'),ErrorMsg:"",Return:""});
 
-        let finalData = {
-            headers: {
-                "content-type": "application/json"
-            },
-            method: exe.Method
-        }
+        // let finalData = {
+        //     headers: {
+        //         "content-type": "application/json"
+        //     },
+        //     method: exe.Method
+        // }
 
-        if (exe.Method != "GET") {
-            finalData["body"] = JSON.stringify(exe.Body);
-        }
+        // if (exe.Method != "GET") {
+        //     finalData["body"] = JSON.stringify(exe.Body);
+        // }
 
-        fetch(exe.Path, finalData).then((response, error) => {
-            if (error) {
-                console.error(error);
-                this.setState({ErrorMsg:error.message});
-            }
-            else {
-                return response.json();
-            }
-        }).then((data, error) => {
-            if (error) {
-                console.error(error);
-                this.setState({ErrorMsg:error.message});
-            }
-            else {
-                if (data.error) {
-                    this.setState({ErrorMsg:data.error});
-                }
-                else {
-                    this.setState({Return:JSON.stringify(data, null, '\t')});
-                }
-            }
-        });
+        // fetch(exe.Path, finalData).then((response, error) => {
+        //     if (error) {
+        //         console.error(error);
+        //         this.setState({ErrorMsg:error.message});
+        //     }
+        //     else {
+        //         return response.json();
+        //     }
+        // }).then((data, error) => {
+        //     if (error) {
+        //         console.error(error);
+        //         this.setState({ErrorMsg:error.message});
+        //     }
+        //     else {
+        //         if (data.error) {
+        //             this.setState({ErrorMsg:data.error});
+        //         }
+        //         else {
+        //             this.setState({Return:JSON.stringify(data, null, '\t')});
+        //         }
+        //     }
+        // });
     }
 
+    RenderPaths() {
+        return this.pathKeys.map((path, index) => {
+            return (
+                <option key={`path${index}`} value={path}>{path}</option>
+            );
+        });
+    }
     RenderError() {
         if (this.state.ErrorMsg != "") {
             return (
@@ -134,25 +164,13 @@ export default class ExecuteAPI extends Component {
             );
         });
     }
-    RenderExecution() {
-        if (this.state.Executing != "") {
+    RenderOutput(label, stateOutput) {
+        if (!_.isEmpty(stateOutput)) {
             return (
                 <div className="flex flex-col mt-3 space-y-2 w-full md:w-1/2 mx-auto border border-black bg-gray-200 p-5 md:rounded-md">
-                    Currently Executing:
+                    {label}:
                     <pre>
-                        {this.state.Executing}
-                    </pre>
-                </div>
-            );
-        }
-    }
-    RenderReturn() {
-        if (this.state.Return != "") {
-            return (
-                <div className="flex flex-col mt-3 space-y-2 w-full md:w-1/2 mx-auto border border-black bg-gray-200 p-5 md:rounded-md">
-                    Data Return:
-                    <pre>
-                        {this.state.Return}
+                        {stateOutput}
                     </pre>
                 </div>
             );
@@ -169,7 +187,9 @@ export default class ExecuteAPI extends Component {
                             <Group.Label>Path</Group.Label>
                         </Group.Pre>
                         <Group.Post>
-                            <Group.Input type="text" defaultValue="/data/v1/" ref={this.formRef.Path} />
+                            <Group.Select ref={(ref) => this.formRef.Path = ref}>
+                                {this.RenderPaths()}
+                            </Group.Select>
                         </Group.Post>
                     </Group>
                     <Group>
@@ -177,7 +197,7 @@ export default class ExecuteAPI extends Component {
                             <Group.Label>Method</Group.Label>
                         </Group.Pre>
                         <Group.Post>
-                            <Group.Select ref={this.formRef.Method}>
+                            <Group.Select ref={(ref) => this.formRef.Method = ref}>
                                 <option value="GET">GET</option>
                                 <option value="POST">POST</option>
                             </Group.Select>
@@ -195,9 +215,11 @@ export default class ExecuteAPI extends Component {
                     {this.RenderData()}
                     <Button color="blue" className="flex-grow rounded-md" onClick={this.ClickExecute.bind(this)}>Execute</Button>
                 </form>
-                {this.RenderExecution()}
-                {this.RenderReturn()}
+                {this.RenderOutput("Execute Code:", this.state.Executing)}
+                {this.RenderOutput("Return Value:", this.state.Return)}
             </>
         );
     }
 }
+
+export default withAuth(null, UserPerms.Admin | UserPerms.Execute)(ExecuteAPI);

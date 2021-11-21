@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import _ from 'lodash';
-
 import UserContext from './UserContext';
 import UserPerms from '../scripts/UserPerms';
-
 import Button from './Button';
-
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import Logout from '../pages/Logout';
 import ExecuteAPI from '../pages/ExecuteAPI';
 import AdminHome from '../pages/AdminHome';
 import PageNotFound from '../pages/PageNotFound';
@@ -18,36 +16,8 @@ export default class Application extends Component {
     static contextType = UserContext;
 
     state = {
-        ShowMenu: true,
-        UserData: null
+        ShowMenu: true
     };
-
-    LoadUserDetails(globalPass) {
-        let AppComp = null;
-
-        if (_.has(this, "state.UserData"))
-            AppComp = this;
-        else
-            AppComp = globalPass;
-
-        fetch("/data/v1/users/check", {
-            method: "GET",
-            headers: {
-                "content-type": "application/json"
-            }
-        }).then((response, error) => {
-            if (response)
-                return response.json();
-        }).then((data, error) => {
-            if (_.has(data, "error"))
-                AppComp.setState({UserData:null});
-            else {
-                console.log(this.context);
-                this.context.setUser.setUser(data);
-                AppComp.setState({UserData:data});
-            }
-        });
-    }
 
     RenderLoggedInLinks() {
         let MenuButtons = [];
@@ -55,17 +25,17 @@ export default class Application extends Component {
         MenuButtons.push(<Button key="menu1" as={Link} to="/" className="bi-house-fill"> Home</Button>);
         MenuButtons.push(<Button key="menu2" as={Link} to="/tools" className="bi-screwdriver"> Tools</Button>);
 
-        if (!_.isEmpty(this.state.UserData)) {
-            if ((this.state.UserData.Perms & UserPerms.Admin) == UserPerms.Admin) {
+        if (!_.isEmpty(this.context.user)) {
+            if (UserPerms.Test(this.context.user.Perms, UserPerms.Admin)) {
                 MenuButtons.push(<Button key="menu3" as={Link} to="/admin" className="bi-gear"> Admin</Button>);
 
-                if ((this.state.UserData.Perms & UserPerms.Admin) == UserPerms.Admin) {
-                    MenuButtons.push(<Button key="menu4" as={Link} to="/admin/exe" className="bi-terminal">     Execute</Button>);
+                if (UserPerms.Test(this.context.user.Perms, UserPerms.Execute)) {
+                    MenuButtons.push(<Button key="menu4" as={Link} to="/admin/exe" className="bi-terminal pl-7"> Execute</Button>);
                 }
             }
         }
 
-        if (_.isEmpty(this.state.UserData)) {
+        if (_.isEmpty(this.context.user)) {
             MenuButtons.push(<Button key="menu15" as={Link} to="/login" className="bi-key"> Login</Button>);
         }
         else {
@@ -76,7 +46,6 @@ export default class Application extends Component {
     }
 
     render() {
-        console.log("render");
         return (
             <>
                 <BrowserRouter>
@@ -96,7 +65,8 @@ export default class Application extends Component {
                         <div className={"md:m-2 " + ((this.state.ShowMenu)?"md:w-5/6 w-full":"w-full") }>
                             <Switch>
                                 <Route exact path="/" component={Home} />
-                                <Route exact path="/login" render={(props) => (<Login {...props} onLogin={this.LoadUserDetails.bind(this)} />)} />
+                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/logout" component={Logout} />
                                 <Route exact path="/admin" component={AdminHome} />
                                 <Route exact path="/admin/exe" component={ExecuteAPI} />
                                 <Route exact path="/tools" component={Tools} />

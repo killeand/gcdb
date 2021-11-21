@@ -7,8 +7,8 @@ const LoginTokensSchema = new Mongoose.Schema({
     Generated: Date,
     ExpiresAt: {
         type: Date,
-        expires: 120, //(60 * 60 * 24),
-        default: Date.now
+        expires: (24 * 60 * 60),
+        default: Date.now() + (24 * 60 * 60 * 1000)
     }
 });
 

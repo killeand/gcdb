@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
+import $ from '../scripts/GCDBAPI';
 import UserContext from '../components/UserContext';
 
 import Group from '../components/Group';
@@ -32,16 +33,11 @@ export default class Login extends Component {
             return;
         }
         
-        fetch("/data/v1/users/auth", {
-            headers: {
-                "content-type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify({
-                Email:findDOMNode(this.formInputs.Username).value,
-                Password:findDOMNode(this.formInputs.Password).value
-            })
-        }).then((response, error) => {
+        $.Post($.Path.Users.Auth, null, {
+            Email:findDOMNode(this.formInputs.Username).value,
+            Password:findDOMNode(this.formInputs.Password).value
+        })
+        .then((response, error) => {
             if (error)
                 this.setState({ErrorMsg:"Authentication server error"});
             else if (response)
@@ -49,11 +45,11 @@ export default class Login extends Component {
                     return response.json();
                 else
                     this.setState({ErrorMsg:"Authentication server error"});
-        }).then((data, error) => {
+        })
+        .then((data, error) => {
             if (_.has(data, "success")) {
                 this.setState({LoginSuccess:true});
-                this.context.setUser(data);
-                //this.props.onLogin();
+                this.context.startCheck();
             }
             else if (_.has(data, "error"))
                 this.setState({ErrorMsg:data.error});
@@ -71,9 +67,10 @@ export default class Login extends Component {
     }
 
     render() {
-        if (this.state.LoginSuccess) {
-            if (_.has(this.props, "location.state.returnpath"))
+        if (this.state.LoginSuccess || this.context.user) {
+            if (_.has(this.props, "location.state.returnpath")) {
                 return (<Redirect to={this.props.location.state.returnpath} />);
+            }
             else
                 return (<Redirect to="/" />);
         }

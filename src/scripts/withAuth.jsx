@@ -1,69 +1,31 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import _ from 'lodash';
-
-import Loading from '../components/Loading';
+import UserContext from '../components/UserContext';
 
 export default function withAuth(newProps, permission) {
     return (AuthedPage) => {
         return class AuthedComponent extends Component {
-            constructor(props) {
-                super(props);
-
-                fetch("/data/v1/users/check", {
-                    method: "GET",
-                    headers: {
-                        "content-type": "application/json"
-                    }
-                }).then((response, error) => {
-                    return response.json();
-                }).then((data, error) => {
-                    let allowed = 0;
-
-                    if (_.has(data, "error")) {
-                        allowed = 2;
-                    }
-                    else if (permission == undefined || permission == null)
-                        allowed = 1;
-                    else
-                        if (_.has(data, "Perms"))
-                            if ((data.Perms & permission) == permission)
-                                allowed = 1;
-                            else
-                                allowed = 3;
-                        else
-                            allowed = 2;
-
-                    this.setState({Loaded:true, Permit:allowed});
-                })
-            }
-            
-            state = {
-                Loaded: false,
-                Permit: null
-            }
+            static contextType = UserContext;
 
             render() {
-                if (!this.state.Loaded) {
-                    return (
-                        <Loading />
-                    );
+                let Authorized = 0;
+                if (this.context.user) {
+                    if (!permission) {
+                        Authorized = 1;
+                    }
+                    else if ((this.context.user.Perms & permission) == permission) {
+                        Authorized = 1;
+                    }
+                }
+                else {
+                    Authorized = -1;
                 }
 
-                if (this.state.Permit == 1) {
-                    return (
-                        <AuthedPage {...newProps} />
-                    );
-                }
-                else if (this.state.Permit == 2) {
-                    return (
-                        <Redirect to={{pathname:"/login", state:{returnpath:this.props.location.pathname+this.props.location.search}}} />
-                    );
-                }
-                else if (this.state.Permit == 3) {
-                    return (
-                        <p>You do not have permission to view this resource</p>
-                    );
+                switch (Authorized) {
+                    case -1: return (<Redirect to={{pathname:"/login", state:{returnpath:this.props.location.pathname+this.props.location.search}}} />);
+                    case 0: return (<p>You do not have permission to view this resource</p>);
+                    case 1: return (<AuthedPage {...newProps} />);                
                 }
             }
         }

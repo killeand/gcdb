@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import withAuth from '../scripts/withAuth';
 import UserPerms from '../scripts/UserPerms';
+import UserContext from '../components/UserContext';
 
 class AdminHome extends Component {
-    state = {
-        Loaded: false
-    };
+    static contextType = UserContext;
 
     render() {
-        console.warn(this.props);
         return (
             <>
                 Welcome to the Admin site
@@ -17,4 +15,4 @@ class AdminHome extends Component {
     }
 }
 
-export default withAuth()(AdminHome);
+export default withAuth(null, UserPerms.Admin)(AdminHome);
