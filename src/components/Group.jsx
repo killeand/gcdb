@@ -4,19 +4,41 @@ import _ from 'lodash';
 export default class Group extends Component {
     render() {
         let classProp = (_.has(this.props, "className")) ? this.props.className : "";
-        let classChildren = _.cloneDeep(this.props.children);
         let newProps = _.cloneDeep(this.props);
-        let newChildren = [];
+        let newChildren = null;
         _.unset(newProps, "className");
-        _.unset(newProps, "children");
+        // _.unset(newProps, "children");
 
-        for (let i = 0; i < classChildren.length; i++) {
-            newChildren.push(React.cloneElement(classChildren[i], {key:"grp"+i, ...classChildren[i].props}));
-        }
-
+        // if (_.isArray(this.props.children)) {
+        //     newChildren = this.props.children.map((child, index) => {
+        //         if (React.isValidElement(child)) {
+        //             let newClassName = (_.has(child.props, "className")) ? child.props.className : "";;
+                    
+        //             if (index == 0)
+        //                 return React.cloneElement(child, { key: "grp"+index, className: newClassName + " pregroup" });
+        //             else if (index == this.props.children.length-1)
+        //                 return React.cloneElement(child, { key: "grp"+index, className: newClassName + " postgroup" });
+        //             else
+        //                 return React.cloneElement(child, { key: "grp"+index });
+        //         }
+        //         else {
+        //             return child;
+        //         }
+        //     });
+        // }
+        // else {
+        //     if (React.isValidElement(this.props.children)) {
+        //         let newClassName = (_.has(this.props.children.props, "className")) ? this.props.children.props.className : "";
+        //         newChildren = React.cloneElement(this.props.children, { className: newClassName + " pregroup postgroup" });
+        //     }
+        //     else {
+        //         newChildren = this.props.children;
+        //     }
+        // }
+        
         return (<div 
             {...newProps}
-            children={newChildren}
+            // children={newChildren}
             className={classProp + " flex flex-row"}
         />);
     }
@@ -100,81 +122,81 @@ export class GroupInput extends Component {
     }
 }
 
-var GroupPre = ({ ...props }) => {
-    if (Array.isArray(props.children)) {
-        return props.children.map((child, index) => {
-            let classProp = "";
+// var GroupPre = ({ ...props }) => {
+//     if (Array.isArray(props.children)) {
+//         return props.children.map((child, index) => {
+//             let classProp = "";
 
-            if (_.has(child.props, "className"))
-                classProp = child.props.className;
+//             if (_.has(child.props, "className"))
+//                 classProp = child.props.className;
             
-            if (index == 0) classProp += " rounded-l-lg";
-            if (index == props.children.length-1) classProp += " border-r border-white";
+//             if (index == 0) classProp += " rounded-l-lg";
+//             if (index == props.children.length-1) classProp += " border-r border-white";
 
-            if (React.isValidElement(child) && classProp != "") {
-                return React.cloneElement(child, { key: index, className: classProp });
-            }
-            else {
-                return React.cloneElement(child, { key: index });
-            }
-        });
-    }
-    else {
-        if (React.isValidElement(props.children)) {
-            let classProp = "";
+//             if (React.isValidElement(child) && classProp != "") {
+//                 return React.cloneElement(child, { key: index, className: classProp });
+//             }
+//             else {
+//                 return React.cloneElement(child, { key: index });
+//             }
+//         });
+//     }
+//     else {
+//         if (React.isValidElement(props.children)) {
+//             let classProp = "";
             
-            if (_.has(props.children, "props"))
-                if (_.has(props.children.props, "className"))
-                    classProp = props.children.props.className;
+//             if (_.has(props.children, "props"))
+//                 if (_.has(props.children.props, "className"))
+//                     classProp = props.children.props.className;
             
-            return React.cloneElement(props.children, { className: classProp + " rounded-l-lg border-r border-white"});
-        }
-        else {
-            return props.children;
-        }
-    }
-}
-var GroupPost = ({ ...props }) => {
-    if (Array.isArray(props.children)) {
-        return props.children.map((child, index) => {
-            let classProp = "";
+//             return React.cloneElement(props.children, { className: classProp + " rounded-l-lg border-r border-white"});
+//         }
+//         else {
+//             return props.children;
+//         }
+//     }
+// }
+// var GroupPost = ({ ...props }) => {
+//     if (Array.isArray(props.children)) {
+//         return props.children.map((child, index) => {
+//             let classProp = "";
 
-            if (_.has(child.props, "className"))
-                classProp = child.props.className;
+//             if (_.has(child.props, "className"))
+//                 classProp = child.props.className;
             
-            if (index == 0) classProp += " border-l border-white";
-            if (index == props.children.length-1) classProp += " rounded-r-lg";
+//             if (index == 0) classProp += " border-l border-white";
+//             if (index == props.children.length-1) classProp += " rounded-r-lg";
 
-            if (React.isValidElement(child) && classProp != "") {
-                return React.cloneElement(child, { key: index, className: classProp });
-            }
-            else {
-                return React.cloneElement(child, { key: index });
-            }
-        });
-    }
-    else {
-        if (React.isValidElement(props.children)) {
-            let classProp = "";
+//             if (React.isValidElement(child) && classProp != "") {
+//                 return React.cloneElement(child, { key: index, className: classProp });
+//             }
+//             else {
+//                 return React.cloneElement(child, { key: index });
+//             }
+//         });
+//     }
+//     else {
+//         if (React.isValidElement(props.children)) {
+//             let classProp = "";
 
-            if (_.has(props.children, "props"))
-                if (_.has(props.children.props, "className"))
-                    classProp = props.children.props.className;
+//             if (_.has(props.children, "props"))
+//                 if (_.has(props.children.props, "className"))
+//                     classProp = props.children.props.className;
 
-            return React.cloneElement(props.children, { className: classProp + " rounded-r-lg border-l border-white"});
-        }
-        else {
-            return props.children;
-        }
-    }
-}
+//             return React.cloneElement(props.children, { className: classProp + " rounded-r-lg border-l border-white"});
+//         }
+//         else {
+//             return props.children;
+//         }
+//     }
+// }
 
 Group.Title = GroupTitle;
 Group.Label = GroupLabel;
 Group.Text = GroupText;
 Group.Input = GroupInput;
 Group.Select = GroupSelect;
-Group.Pre = GroupPre;
-Group.Post = GroupPost;
+// Group.Pre = GroupPre;
+// Group.Post = GroupPost;
 
-export { GroupPre, GroupPost };
+// export { GroupPre, GroupPost };

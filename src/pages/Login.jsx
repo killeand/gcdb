@@ -80,20 +80,12 @@ export default class Login extends Component {
                 {this.RenderAlerts()}
                 <form className="flex flex-col space-y-2 mx-auto w-full md:w-1/2 p-5 border border-black bg-gray-200 md:rounded-md" onSubmit={this.HandleLogin.bind(this)}>
                     <Group>
-                        <Group.Pre>
-                            <Group.Label htmlFor="username">Username:</Group.Label>
-                        </Group.Pre>
-                        <Group.Post>
-                            <Group.Input id="username" type="text" ref={(obj) => this.formInputs.Username = obj} />
-                        </Group.Post>
+                        <Group.Label htmlFor="username">Username:</Group.Label>
+                        <Group.Input id="username" type="text" ref={(obj) => this.formInputs.Username = obj} />
                     </Group>
                     <Group>
-                        <Group.Pre>
-                            <Group.Label htmlFor="password">Password:</Group.Label>
-                        </Group.Pre>
-                        <Group.Post>
-                            <Group.Input id="password" type="password" ref={(obj) => this.formInputs.Password = obj} />
-                        </Group.Post>
+                        <Group.Label htmlFor="password">Password:</Group.Label>
+                        <Group.Input id="password" type="password" ref={(obj) => this.formInputs.Password = obj} />
                     </Group>
                     <div className="text-center">
                         <Button color="blue" className="border border-black rounded-xl">Login</Button>
