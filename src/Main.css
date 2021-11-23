@@ -30,10 +30,30 @@ p {
     height: 1.25rem;
 }
 
-.pregroup {
+.group {
+    @apply flex flex-row;
+}
+
+.group-pre {
     @apply rounded-l-lg border-r border-white;
 }
 
-.postgroup {
+.group-post {
     @apply rounded-r-lg border-l border-white;
+}
+
+.group-title {
+    @apply p-1 font-bold bg-gradient-to-b from-gray-100 to-gray-400;
+}
+
+.group-label {
+    @apply p-1 font-bold bg-gradient-to-b from-gray-100 to-gray-400;
+}
+
+.group-text {
+    @apply p-1 flex-grow;
+}
+
+.group-input {
+    @apply flex-grow w-full bg-white px-2;
 }

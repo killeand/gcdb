@@ -143,14 +143,14 @@ class ExecuteAPI extends Component {
         return this.state.Data.map((item, index) => {
             return (
                 <div key={"data-"+index} className="flex flex-row space-x-2">
-                    <Group>
-                        <Group.Label>Key</Group.Label>
-                        <Group.Input type="text" placeholder="Key" value={this.state.Data[index].key} onChange={this.ChangeKey.bind(this, index)}></Group.Input>
-                    </Group>
-                    <Group>
-                        <Group.Label>Value</Group.Label>
-                        <Group.Input type="text" placeholder="Value" value={this.state.Data[index].value} onChange={this.ChangeValue.bind(this, index)}></Group.Input>
-                    </Group>
+                    <Group.Box>
+                        <Group.Label className="group-pre">Key</Group.Label>
+                        <Group.Input type="text" placeholder="Key" className="group-post" value={this.state.Data[index].key} onChange={this.ChangeKey.bind(this, index)} />
+                    </Group.Box>
+                    <Group.Box>
+                        <Group.Label className="group-pre">Value</Group.Label>
+                        <Group.Input type="text" placeholder="Value" className="group-post" value={this.state.Data[index].value} onChange={this.ChangeValue.bind(this, index)} />
+                    </Group.Box>
                     <Button color="red" className="bi-x-circle-fill rounded-md" onClick={this.ClickRemoveItem.bind(this, index)} />
                 </div>
             );
@@ -174,24 +174,24 @@ class ExecuteAPI extends Component {
             <>
                 {this.RenderError()}
                 <form className="flex flex-col space-y-2 w-full md:w-1/2 mx-auto border border-black bg-gray-200 p-5 md:rounded-md" onSubmit={(e) => e.preventDefault()}>
-                    <Group>
-                        <Group.Label>Path</Group.Label>
-                        <Group.Select ref={(ref) => this.formRef.Path = ref}>
+                    <Group.Box>
+                        <Group.Label className="group-pre">Path</Group.Label>
+                        <Group.Select className="group-post" ref={(ref) => this.formRef.Path = ref}>
                             {this.RenderPaths()}
                         </Group.Select>
-                    </Group>
-                    <Group>
-                        <Group.Label>Method</Group.Label>
-                        <Group.Select ref={(ref) => this.formRef.Method = ref}>
+                    </Group.Box>
+                    <Group.Box>
+                        <Group.Label className="group-pre">Method</Group.Label>
+                        <Group.Select className="group-post" ref={(ref) => this.formRef.Method = ref}>
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
                         </Group.Select>
-                    </Group>
-                    <Group>
-                        <Group.Label className="flex-grow">Data</Group.Label>
+                    </Group.Box>
+                    <Group.Box>
+                        <Group.Label className="group-pre flex-grow">Data</Group.Label>
                         <Button color="green" className="bi-plus-circle-fill" onClick={this.ClickAddData.bind(this)}> Add</Button>
-                        <Button color="red" className="bi-x-circle-fill" onClick={this.ClickClearData.bind(this)}> Clear</Button>
-                    </Group>
+                        <Button color="red" className="bi-x-circle-fill group-post" onClick={this.ClickClearData.bind(this)}> Clear</Button>
+                    </Group.Box>
                     {this.RenderData()}
                     <Button color="blue" className="flex-grow rounded-md" onClick={this.ClickExecute.bind(this)}>Execute</Button>
                 </form>
