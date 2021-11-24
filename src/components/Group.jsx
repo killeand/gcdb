@@ -50,10 +50,25 @@ export class GroupText extends GroupClass {
 }
 
 export class GroupInput extends GroupClass {
-    constructor(props) { super(props, "group-input"); }
+    constructor(props) { 
+        super(props, "group-input");
+        
+        let { value, onChange, ...otherInputProps} = this.newProps;
+
+        this.state = { inputValue: ((!_.isNil(value))?value:"") }
+        this.newChange = onChange;
+        this.inputProps = otherInputProps;
+    }
+
+    ChangeValue(e) {
+        if (!_.isNil(this.newChange))
+            this.newChange(e.target.value);
+        this.setState({inputValue:e.target.value});
+    }
+
     render() {
         return (
-            <input className={this.newClass} {...this.newProps} />
+            <input className={this.newClass} value={this.state.inputValue} onChange={this.ChangeValue.bind(this)} {...this.otherInputProps} />
         );
     }
 }

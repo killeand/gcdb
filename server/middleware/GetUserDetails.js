@@ -1,18 +1,17 @@
+import _ from 'lodash';
 import Users from '../models/Users.js';
 import LoginTokens from '../models/LoginTokens.js';
 
-const GetUserDetails = async (req, res, next) => {
-    // Load Session Token
-    let TokenID = req.session.Token;
-
-    if (!TokenID) {
+const GetUserDetails = (permissions) => async (req, res, next) => {
+    // Load session token
+    let TokenID = (_.has(req, "session.Token"))?req.session.Token:null;
+    if (_.isNil(TokenID)) {
         res.status(400).json({code:1,error:"Not logged in"});
         return;
     }
 
-    // Load Token User ID
+    // Load token user id
     let TokenData = null;
-
     try {
         TokenData = await LoginTokens.findOne({Token: TokenID}, {ID:1, IP:1});
     }
@@ -21,22 +20,23 @@ const GetUserDetails = async (req, res, next) => {
         return;
     }
 
+    // Token not found (old cookie)
     if (TokenData == null) {
         req.session.destroy();
-        res.status(400).json({code:3,error:"Not logged in"});
+        res.status(400).clearCookie("GCDBC").json({code:3,error:"Not logged in"});
         return;
     }
 
+    // Session security check (same location)
     if (req.ip != TokenData.IP) {
         req.session.destroy();
         await LoginTokens.deleteMany({Token: TokenID});
-        res.status(400).json({code:4,error:"Not logged in"});
+        res.status(400).clearCookie("GCDBC").json({code:4,error:"Not logged in"});
         return;
     }
 
-    // Load User Permissions
+    // Load user permissions
     let UserData = null;
-
     try {
         UserData = await Users.findOne({_id: TokenData.ID}, {DisplayName:1, Email:1, Friends:1, Perms:1});
     }
@@ -45,12 +45,22 @@ const GetUserDetails = async (req, res, next) => {
         return;
     }
 
+    // User doesn't exist
     if (UserData == null) {
         res.status(400).json({code:6,error:"User data not available"});
         return;
     }
 
     res.locals.UserDetails = UserData;
+
+    // Check permissions if exists
+    if (!_.isNil(permissions)) {
+        if ((UserData.Perms & permissions) != permissions) {
+            res.status(403).json({code:7,error:"User not authorized to view this content"});
+            return;
+        }
+    }
+
     next();
 }
 

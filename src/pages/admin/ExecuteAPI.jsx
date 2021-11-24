@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import withAuth from '../scripts/withAuth';
-import UserPerms from '../scripts/UserPerms';
+import withAuth from '../../scripts/withAuth';
+import UserPerms from '../../scripts/UserPerms';
 import _ from 'lodash';
-import $ from '../scripts/GCDBAPI';
-import Group from '../components/Group';
-import Button from '../components/Button';
-import Alert from '../components/Alert';
+import $ from '../../scripts/GCDBAPI';
+import Group from '../../components/Group';
+import Button from '../../components/Button';
+import Alert from '../../components/Alert';
 
 class ExecuteAPI extends Component {
     constructor(props) {
@@ -42,15 +42,15 @@ class ExecuteAPI extends Component {
         return retval;
     }
 
-    ChangeKey(index, e) {
+    ChangeKey(index, value) {
         let localData = this.state.Data;
-        localData[index].key = e.target.value;
+        localData[index].key = value;
 
         this.setState({Data:localData});
     }
-    ChangeValue(index, e) {
+    ChangeValue(index, value) {
         let localData = this.state.Data;
-        localData[index].value = e.target.value;
+        localData[index].value = value;
 
         this.setState({Data:localData});
     }
@@ -72,52 +72,72 @@ class ExecuteAPI extends Component {
     }
     ClickExecute(e) {
         let dataBuild = {};
+        let Path = findDOMNode(this.formRef.Path).value;
+        let Method = findDOMNode(this.formRef.Method).value;
 
         this.state.Data.map((item, index) => {
             dataBuild[item.key] = item.value;
         });
 
         let exe = {
-            Path: findDOMNode(this.formRef.Path).value,
-            Method: findDOMNode(this.formRef.Method).value,
-            Body: dataBuild
-        };
+            Path: Path,
+            Method: Method,
+            Data: dataBuild
+        }
 
         this.setState({Executing:JSON.stringify(exe, null, '\t'),ErrorMsg:"",Return:""});
 
-        // let finalData = {
-        //     headers: {
-        //         "content-type": "application/json"
-        //     },
-        //     method: exe.Method
-        // }
-
-        // if (exe.Method != "GET") {
-        //     finalData["body"] = JSON.stringify(exe.Body);
-        // }
-
-        // fetch(exe.Path, finalData).then((response, error) => {
-        //     if (error) {
-        //         console.error(error);
-        //         this.setState({ErrorMsg:error.message});
-        //     }
-        //     else {
-        //         return response.json();
-        //     }
-        // }).then((data, error) => {
-        //     if (error) {
-        //         console.error(error);
-        //         this.setState({ErrorMsg:error.message});
-        //     }
-        //     else {
-        //         if (data.error) {
-        //             this.setState({ErrorMsg:data.error});
-        //         }
-        //         else {
-        //             this.setState({Return:JSON.stringify(data, null, '\t')});
-        //         }
-        //     }
-        // });
+        if (Method == "GET")
+            $.Get(Path)
+            .then((response, error) => {
+                if (error) {
+                    console.error(error);
+                    this.setState({ErrorMsg:error.message});
+                }
+                else {
+                    return response.json();
+                }
+            })
+            .then((data, error) => {
+                if (error) {
+                    console.error(error);
+                    this.setState({ErrorMsg:error.message});
+                }
+                else {
+                    if (data.error) {
+                        this.setState({ErrorMsg:data.error});
+                    }
+                    else {
+                        this.setState({Return:JSON.stringify(data, null, '\t')});
+                    }
+                }
+            });
+        
+        if (Method == "POST")
+            $.Post(Path, null, dataBuild)
+            .then((response, error) => {
+                if (error) {
+                    console.error(error);
+                    this.setState({ErrorMsg:error.message});
+                }
+                else {
+                    return response.json();
+                }
+            })
+            .then((data, error) => {
+                if (error) {
+                    console.error(error);
+                    this.setState({ErrorMsg:error.message});
+                }
+                else {
+                    if (data.error) {
+                        this.setState({ErrorMsg:data.error});
+                    }
+                    else {
+                        this.setState({Return:JSON.stringify(data, null, '\t')});
+                    }
+                }
+            });
     }
 
     RenderPaths() {
@@ -145,11 +165,11 @@ class ExecuteAPI extends Component {
                 <div key={"data-"+index} className="flex flex-row space-x-2">
                     <Group.Box>
                         <Group.Label className="group-pre">Key</Group.Label>
-                        <Group.Input type="text" placeholder="Key" className="group-post" value={this.state.Data[index].key} onChange={this.ChangeKey.bind(this, index)} />
+                        <Group.Input type="text" placeholder="Key" className="group-post" value={item.key} onChange={this.ChangeKey.bind(this, index)} />
                     </Group.Box>
                     <Group.Box>
                         <Group.Label className="group-pre">Value</Group.Label>
-                        <Group.Input type="text" placeholder="Value" className="group-post" value={this.state.Data[index].value} onChange={this.ChangeValue.bind(this, index)} />
+                        <Group.Input type="text" placeholder="Value" className="group-post" value={item.value} onChange={this.ChangeValue.bind(this, index)} />
                     </Group.Box>
                     <Button color="red" className="bi-x-circle-fill rounded-md" onClick={this.ClickRemoveItem.bind(this, index)} />
                 </div>

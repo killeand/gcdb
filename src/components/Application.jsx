@@ -7,10 +7,10 @@ import Button from './Button';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Logout from '../pages/Logout';
-import ExecuteAPI from '../pages/ExecuteAPI';
-import AdminHome from '../pages/AdminHome';
+import ExecuteAPI from '../pages/admin/ExecuteAPI';
+import Admin from '../pages/admin/Admin';
 import PageNotFound from '../pages/PageNotFound';
-import Tools from '../pages/Tools';
+import Tools from '../pages/tools/Tools';
 
 export default class Application extends Component {
     static contextType = UserContext;
@@ -67,7 +67,7 @@ export default class Application extends Component {
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/logout" component={Logout} />
-                                <Route exact path="/admin" component={AdminHome} />
+                                <Route exact path="/admin" component={Admin} />
                                 <Route exact path="/admin/exe" component={ExecuteAPI} />
                                 <Route exact path="/tools" component={Tools} />
                                 <Route exact path="/404" component={PageNotFound} />
