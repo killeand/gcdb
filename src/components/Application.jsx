@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 import UserContext from './UserContext';
 import UserPerms from '../scripts/UserPerms';
 import Button from './Button';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import Logout from '../pages/Logout';
-import ExecuteAPI from '../pages/admin/ExecuteAPI';
-import Admin from '../pages/admin/Admin';
-import PageNotFound from '../pages/PageNotFound';
-import Tools from '../pages/tools/Tools';
+import Loading from './Loading';
+
+const Home = lazy(() => import('../pages/Home'));
+const Login = lazy(() => import('../pages/Login'));
+const Logout = lazy(() => import('../pages/Logout'));
+const ExecuteAPI = lazy(() => import('../pages/admin/ExecuteAPI'));
+const Admin = lazy(() => import('../pages/admin/Admin'));
+const PageNotFound = lazy(() => import('../pages/PageNotFound'));
+const Tools = lazy(() => import('../pages/tools/Tools'));
+const AdminUsers = lazy(() => import('../pages/admin/Users'));
 
 export default class Application extends Component {
     static contextType = UserContext;
@@ -22,15 +25,19 @@ export default class Application extends Component {
     RenderLoggedInLinks() {
         let MenuButtons = [];
 
-        MenuButtons.push(<Button key="menu1" as={Link} to="/" className="bi-house-fill"> Home</Button>);
+        MenuButtons.push(<Button key="menu1" as={Link} to="/" className="bi-house"> Home</Button>);
         MenuButtons.push(<Button key="menu2" as={Link} to="/tools" className="bi-screwdriver"> Tools</Button>);
 
         if (!_.isEmpty(this.context.user)) {
             if (UserPerms.Test(this.context.user.Perms, UserPerms.Admin)) {
                 MenuButtons.push(<Button key="menu3" as={Link} to="/admin" className="bi-gear"> Admin</Button>);
 
+                if (UserPerms.Test(this.context.user.Perms, UserPerms.UserManage)) {
+                    MenuButtons.push(<Button key="menu4" as={Link} to="/admin/users" className="bi-people pl-7"> Users</Button>);
+                }
+
                 if (UserPerms.Test(this.context.user.Perms, UserPerms.Execute)) {
-                    MenuButtons.push(<Button key="menu4" as={Link} to="/admin/exe" className="bi-terminal pl-7"> Execute</Button>);
+                    MenuButtons.push(<Button key="menu5" as={Link} to="/admin/exe" className="bi-terminal pl-7"> Execute</Button>);
                 }
             }
         }
@@ -64,13 +71,14 @@ export default class Application extends Component {
                         </aside>
                         <div className={"md:m-2 " + ((this.state.ShowMenu)?"md:w-5/6 w-full":"w-full") }>
                             <Switch>
-                                <Route exact path="/" component={Home} />
-                                <Route exact path="/login" component={Login} />
-                                <Route exact path="/logout" component={Logout} />
-                                <Route exact path="/admin" component={Admin} />
-                                <Route exact path="/admin/exe" component={ExecuteAPI} />
-                                <Route exact path="/tools" component={Tools} />
-                                <Route exact path="/404" component={PageNotFound} />
+                                <Route exact path="/" render={() => <Suspense fallback={<Loading />}><Home /></Suspense>} />
+                                <Route exact path="/login" render={() => <Suspense fallback={<Loading />}><Login /></Suspense>} />
+                                <Route exact path="/logout" render={() => <Suspense fallback={<Loading />}><Logout /></Suspense>} />
+                                <Route exact path="/admin" render={() => <Suspense fallback={<Loading />}><Admin /></Suspense>} />
+                                <Route exact path="/admin/users" render={() => <Suspense fallback={<Loading />}><AdminUsers /></Suspense>} />
+                                <Route exact path="/admin/exe" render={() => <Suspense fallback={<Loading />}><ExecuteAPI /></Suspense>} />
+                                <Route exact path="/tools" render={() => <Suspense fallback={<Loading />}><Tools /></Suspense>} />
+                                <Route exact path="/404" render={() => <Suspense fallback={<Loading />}><PageNotFound /></Suspense>} />
                                 <Route>
                                     <Redirect to="/404" />
                                 </Route>
