@@ -10,12 +10,13 @@ export default class Button extends Component {
         _.unset(newProps, "as");
 
         if (_.has(this.props, "color"))
-            switch(this.props.color) {
+            switch(newProps.color) {
                 case "red": classProp += " bg-gradient-to-b from-red-100 to-red-400 hover:from-white hover:to-red-300"; break;
                 case "green": classProp += " bg-gradient-to-b from-green-100 to-green-400 hover:from-white hover:to-green-300"; break;
                 case "blue": classProp += " bg-gradient-to-b from-blue-100 to-blue-400 hover:from-white hover:to-blue-300"; break;
                 case "gray": classProp += " bg-gradient-to-b from-gray-100 to-gray-400 hover:from-white hover:to-gray-300"; break;
                 case "white": classProp += " bg-gradient-to-b from-white to-gray-300 hover:from-gray-100 hover:to-gray-400"; break;
+                case "disabled": classProp += " bg-gradient-to-b from-gray-100 to-gray-400 text-gray-600"; break;
                 default: classProp += " bg-gradient-to-b from-gray-100 to-gray-400 hover:from-white hover:to-gray-300";
             }
         else
