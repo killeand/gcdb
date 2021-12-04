@@ -1,11 +1,11 @@
 import BCrypt from 'bcrypt';
 
 import Users from '../models/Users.js';
-import LoginTokens from '../models/LoginTokens.js';
+import RefreshTokens from '../models/RefreshTokens.js';
 
-const DB_SETUP = () => (req, res, next) => {
+export default (req, res, next) => {
     Users.deleteMany({}, (err) => { if (err) console.error(err); });
-    LoginTokens.deleteMany({}, (err) => { if (err) console.error(err); });
+    RefreshTokens.deleteMany({}, (err) => { if (err) console.error(err); });
 
     let GenSalt = BCrypt.genSaltSync(12);
     let GenPass = BCrypt.hashSync("admin", GenSalt);
@@ -21,5 +21,3 @@ const DB_SETUP = () => (req, res, next) => {
 
     return;
 };
-
-export default DB_SETUP;

@@ -1,7 +1,7 @@
 import Express from 'express';
 import _ from 'lodash';
 
-import LoginTokens from '../../models/LoginTokens.js';
+import RefreshTokens from '../../models/RefreshTokens.js';
 
 const ROUTE = Express.Router();
 
@@ -12,7 +12,7 @@ ROUTE.get(/^.*$/, async (req, res, next) => {
     // Remove any tokens
     if (!_.isNil(TokenID)) {
         try {
-            LoginTokens.deleteOne({Token:TokenID});
+            RefreshTokens.deleteOne({Token:TokenID});
         }
         catch (error) {
             // do nothing for now

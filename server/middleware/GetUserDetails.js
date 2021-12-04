@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Users from '../models/Users.js';
-import LoginTokens from '../models/LoginTokens.js';
+import RefreshTokens from '../models/RefreshTokens.js';
 
 const GetUserDetails = (permissions) => async (req, res, next) => {
     // Load session token
@@ -13,7 +13,7 @@ const GetUserDetails = (permissions) => async (req, res, next) => {
     // Load token user id
     let TokenData = null;
     try {
-        TokenData = await LoginTokens.findOne({Token: TokenID}, {ID:1, IP:1});
+        TokenData = await RefreshTokens.findOne({Token: TokenID}, {ID:1, IP:1});
     }
     catch (error) {
         res.status(500).json({code:2,error:"Problem loading the requested data"});
@@ -30,7 +30,7 @@ const GetUserDetails = (permissions) => async (req, res, next) => {
     // Session security check (same location)
     if (req.ip != TokenData.IP) {
         req.session.destroy();
-        await LoginTokens.deleteMany({Token: TokenID});
+        await RefreshTokens.deleteMany({Token: TokenID});
         res.status(400).clearCookie("GCDBC").json({code:4,error:"Not logged in"});
         return;
     }

@@ -3,11 +3,13 @@ import _ from 'lodash';
 const GCDBAPI = {
     Path: {
         Setup: "/data/v1/setup",
+        Auth: {
+            Login: "/data/v1/auth/login",
+            Logout: "/data/v1/auth/logout",
+            Refresh: "/data/v1/auth/refresh"
+        },
         Users: {
-            Read: "/data/v1/users/read",
-            Auth: "/data/v1/users/auth",
-            Check: "/data/v1/users/check",
-            Logout: "/data/v1/users/logout"
+            Read: "/data/v1/users/read"
         }
     },
     Execute: (path, headers, method, body) => {

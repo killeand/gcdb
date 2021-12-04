@@ -222,4 +222,5 @@ class ExecuteAPI extends Component {
     }
 }
 
-export default withAuth(null, UserPerms.Admin | UserPerms.Execute)(ExecuteAPI);
+//export default withAuth(null, UserPerms.Admin | UserPerms.Execute)(ExecuteAPI);
+export default ExecuteAPI;

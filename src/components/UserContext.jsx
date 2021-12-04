@@ -18,21 +18,21 @@ export class UserProvider extends Component {
         if (_.has(this, "state")) newThis = this;
         else newThis = passedThis;
 
-        $.Get($.Path.Users.Check)
-        .then((response, error) => {
-            return response.json();
-        })
-        .then((data, error) => {
-            if (_.has(data, "error")) {
-                newThis.StopCheck();
-            }
-            else {
-                if (newThis.checkTimer == null) {
-                    newThis.checkTimer = setInterval(() => newThis.StartCheck(newThis), 60 * 1000);
-                    newThis.setState({data:data});
-                }
-            }   
-        })
+        // $.Get($.Path.Users.Check)
+        // .then((response, error) => {
+        //     return response.json();
+        // })
+        // .then((data, error) => {
+        //     if (_.has(data, "error")) {
+        //         newThis.StopCheck();
+        //     }
+        //     else {
+        //         if (newThis.checkTimer == null) {
+        //             newThis.checkTimer = setInterval(() => newThis.StartCheck(newThis), 60 * 1000);
+        //             newThis.setState({data:data});
+        //         }
+        //     }   
+        // })
     }
 
     StopCheck() {

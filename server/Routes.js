@@ -3,7 +3,7 @@ import Path from 'path';
 import FS from 'fs';
 import _ from 'lodash';
 
-import DataRoot from './data/Index.js';
+import DataRoot from './data/DataRoot.js';
 import NotFound from './middleware/EndpointNotFound.js';
 import CTRequire from './middleware/ContentTypeRequire.js';
 
