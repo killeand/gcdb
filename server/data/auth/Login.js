@@ -54,6 +54,21 @@ ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
         return;
     }
 
+    // GENERATE REFRESH ID AND SAVE
+    let rid = Buffer.from(faker.random.alphaNumeric(64)).toString("base64url");
+    try {
+        RefreshTokens.create({
+            Token: rid,
+            ID: UserDoc._id,
+            IP: req.ip,
+            Generated: new Date()
+        });
+    }
+    catch (error) {
+        res.json({code:7, error:"Unable to run the requested function"});
+        return;
+    }
+
     // GENERATE AUTH AND REFRESH TOKENS
     let Secret = new SecretManager();
     let accessbody = {
@@ -71,12 +86,13 @@ ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
         aud: "GCDBUser",
         exp: Date.now() + (10 * 60 * 1000),
         iat: Date.now(),
-        tid: Buffer.from(faker.random.alphaNumeric(32)).toString("base64url")
+        rid: rid
     }
     
-    let access_token = JWT.sign(accessbody, Secret.Get(), {algorithm:"HS512"});
-    let refresh_token = JWT.sign(refreshbody, Secret.Get(), {algorithm:"HS512"});
+    Secret.Check();
 
+    let access_token = JWT.sign(accessbody, Secret.Secret, {algorithm:"HS512"});
+    let refresh_token = JWT.sign(refreshbody, Secret.Secret, {algorithm:"HS512"});
 
     res.json({code:8, access_token: access_token, refresh_token: refresh_token, token_type: "Bearer"});
     return;

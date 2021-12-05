@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const CONTENT_TYPE_REQUIRE = (contentType) => {
+export default (contentType) => {
     return (req, res, next) => {
         if (_.isNil(contentType)) contentType = "application/json";
 
@@ -12,5 +12,3 @@ const CONTENT_TYPE_REQUIRE = (contentType) => {
         next();
     }
 }
-
-export default CONTENT_TYPE_REQUIRE;

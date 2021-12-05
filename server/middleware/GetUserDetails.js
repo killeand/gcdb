@@ -2,7 +2,9 @@ import _ from 'lodash';
 import Users from '../models/Users.js';
 import RefreshTokens from '../models/RefreshTokens.js';
 
-const GetUserDetails = (permissions) => async (req, res, next) => {
+export default (permissions) => {
+    if (!_.isNil(permissions))
+    return async (req, res, next) => {
     // Load session token
     let TokenID = (_.has(req, "session.Token"))?req.session.Token:null;
     if (_.isNil(TokenID)) {
@@ -63,5 +65,3 @@ const GetUserDetails = (permissions) => async (req, res, next) => {
 
     next();
 }
-
-export default GetUserDetails;

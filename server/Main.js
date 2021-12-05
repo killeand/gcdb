@@ -10,7 +10,7 @@ import RateLimiter from './middleware/RateLimiter.js';
 import Routes from './Routes.js';
 import SecretManager from "./SecretManager.js";
 
-(new SecretManager()).Get();
+(new SecretManager())
 const EXPRESS_APP = Express();
 const PORT = 4000;
 const SSL_CERTS = { key: FS.readFileSync('./ssltls/key.pem', 'utf8'), cert: FS.readFileSync('./ssltls/cert.pem', 'utf8') }

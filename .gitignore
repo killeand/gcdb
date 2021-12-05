@@ -4,4 +4,4 @@ dist
 dist-ssr
 *.local
 ssltls/
-secret.key
+secret.json

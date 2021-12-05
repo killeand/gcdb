@@ -4,38 +4,63 @@ import _ from 'lodash';
 import faker from 'faker';
 
 export default class SecretManager {
+    static FileUrl = null;
+    static RawJSON = null;
     static Secret = null;
-    Get() {
-        if (!_.isNil(this.Secret))
-            return this.Secret;
+    static Expires = null;
 
-        if (fs.existsSync(path.resolve("./secret.key"))) {
-            let secret_string = fs.readFileSync(path.resolve("./secret.key"));
+    constructor() {
+        if (_.isNil(this.FileUrl))
+            this.FileUrl = "./secret.json";
 
-            if (!_.isEmpty(secret_string)) {
-                this.Secret = secret_string;
-                return this.Secret;
+        let filedata = null;
+
+        if (_.isNil(this.RawJSON)) {
+            if (fs.existsSync(path.resolve(this.FileUrl))) {
+                try {
+                    filedata = fs.readFileSync(path.resolve(this.FileUrl));
+
+                    this.RawJSON = JSON.parse(filedata);
+                    this.Secret = this.RawJSON.secret;
+                    this.Expires = this.RawJSON.expires;
+                }
+                catch (error) {
+                    this.Regenerate();
+                }
             }
             else {
-                this.Secret = this.Gen();
-                this.Save();
-                return this.Secret;
+                this.Regenerate();
             }
         }
+    }
+
+    Check() {
+        if (_.isNil(this.RawJSON)) {
+            this.Regenerate();
+        }
         else {
-            this.Secret = this.Gen();
-            this.Save();
-            return this.Secret;
+            if (this.Expires < Date.now()) {
+                this.Regenerate();
+            }
         }
     }
-    Save() {
-        if (_.isNil(this.Secret))
-            this.Secret = this.Gen();
-            
-        fs.writeFileSync(path.resolve("./secret.key"), this.Secret);
+
+    Regenerate() {
+        let newkey = Buffer.from(faker.random.alphaNumeric(128)).toString("base64url");
+
+        this.RawJSON = {
+            secret: newkey,
+            expires: Date.now() + (30 * 24 * 60 * 60 * 1000)
+        }
+
+        this.Secret = this.RawJSON.secret;
+        this.Expires = this.RawJSON.expires;
+
+        this.Save();
     }
-    Gen() {
-        return Buffer.from(faker.random.alphaNumeric(128)).toString("base64url");
+    
+    Save() {
+        fs.writeFileSync(path.resolve(this.FileUrl), JSON.stringify(this.RawJSON, null, '\t'));
     }
 }
 

@@ -5,9 +5,8 @@ import RefreshTokens from '../../models/RefreshTokens.js';
 
 const ROUTE = Express.Router();
 
-ROUTE.get(/^.*$/, async (req, res, next) => {
-    // Load session token
-    let TokenID = (_.has(req, "session.Token"))?req.session.Token:null;
+ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
+    if (!_.has(req.body, "refresh_token"))
     
     // Remove any tokens
     if (!_.isNil(TokenID)) {

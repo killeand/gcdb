@@ -1,16 +1,17 @@
 import { RateLimiterMemory } from 'rate-limiter-flexible';
+import _ from 'lodash';
 
-const RateLimiter = new RateLimiterMemory({
-    points: 12,
-    duration: 1
-});
-
-const RateLimiterMiddleware = (req, res, next) => {
-    RateLimiter.consume(req.ip, 2).then(() => {
-        next();
-    }).catch(() => {
-        res.status(429).send("Too many requests");
+export default (points, duration) => {
+    let RateLimiter = new RateLimiterMemory({
+        points: (!_.isNil(points)) ? points : 12,
+        duration: (!_.isNil(duration)) ? duration : 1
     });
-}
 
-export default RateLimiterMiddleware;
+    return (req, res, next) => {
+        RateLimiter.consume(req.ip, 1).then(() => {
+            next();
+        }).catch(() => {
+            res.status(429).json({error:"Too many requests"});
+        });
+    }
+}
