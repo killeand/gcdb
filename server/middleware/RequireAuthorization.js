@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import JWT from 'jsonwebtoken';
+import SecretManager from '../SecretManager.js';
 
 export default (req, res, next) => {
     if (_.isNil(req.headers['Authorization'])) {
@@ -19,7 +20,15 @@ export default (req, res, next) => {
         return;
     }
 
-    res.locals.AuthToken = AuthValue[1];
+    let Secret = new SecretManager();
+    let AuthToken = null;
+    
+    try {
+        AuthToken = JWT.verify(AuthValue[1], Secret.Secret, { audience: "GCDBUser", issuer: req.hostname });
+    }
+    catch (error) {
+        console.error("JWTVerify:", error);
+    }
     
     next();
 }
