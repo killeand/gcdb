@@ -5,13 +5,13 @@ import _ from 'lodash';
 
 import DataRoot from './data/DataRoot.js';
 import NotFound from './middleware/EndpointNotFound.js';
-import CTRequire from './middleware/ContentTypeRequire.js';
+import ContentType from './middleware/RequireContentType.js';
 
 const ROUTES = Express.Router();
 
-ROUTES.use("/data", CTRequire());
+ROUTES.use("/data", ContentType());
 ROUTES.use("/data/v1", DataRoot);
-ROUTES.use("/data", NotFound());
+ROUTES.use("/data", NotFound);
 
 // ROUTES.get(/^[^\.]*$/, (req, res, next) => {
 //     res.sendFile(Path.resolve('./build/main.html'));

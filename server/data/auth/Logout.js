@@ -1,32 +1,45 @@
 import Express from 'express';
 import _ from 'lodash';
-
+import JWT from 'jsonwebtoken';
+import SecretManager from '../../SecretManager.js';
 import RefreshTokens from '../../models/RefreshTokens.js';
 
 const ROUTE = Express.Router();
 
 ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
-    if (!_.has(req.body, "refresh_token"))
-    
-    // Remove any tokens
-    if (!_.isNil(TokenID)) {
-        try {
-            RefreshTokens.deleteOne({Token:TokenID});
-        }
-        catch (error) {
-            // do nothing for now
-        }
+    if (!_.has(req.body, "refresh_token")) {
+        res.status(400).json({code:1,error:"You must supply a refresh_token field"});
+        return;
     }
 
-    // Destroy session
-    req.session.destroy((error) => {
-        if (!error) {
-            res.clearCookie("GCDBC").json({code:1, success:"You have been logged out"});
-        }
-        else {
-            res.clearCookie("GCDBC").json({code:2, success:"You have been logged out"});
-        }
-    });
+    let Secret = new SecretManager();
+    let AuthToken = null;
+    
+    try {
+        AuthToken = JWT.verify(req.body.refresh_token, Secret.Secret, { audience: "GCDBUser", issuer: req.hostname });
+    }
+    catch (error) {
+        console.error("JWTVerify:", error);
+    }
+
+    if (_.isNil(AuthToken)) {
+        res.status(400).json({code:2,error:"There is a problem with the supplied refresh token"});
+        return;
+    }
+
+    if (!_.has(AuthToken, "rid")) {
+        res.status(400).json({code:3,error:"There is a problem with the supplied refresh token"});
+        return;
+    }
+
+    try {
+        await RefreshTokens.deleteOne({Token:AuthToken.rid});
+    }
+    catch (error) {
+        console.error("RefreshToken Delete:", error);
+    }
+    
+    res.status(200).json({code:4,success:"User logged out"});
     return;
 });
 

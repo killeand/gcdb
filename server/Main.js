@@ -59,6 +59,6 @@ Mongoose.connect(MONGO_STRING, { useNewUrlParser: true, useUnifiedTopology: true
 EXPRESS_APP.use(Helmet({
     contentSecurityPolicy: false
 }));
-EXPRESS_APP.use(RateLimiter);
+//EXPRESS_APP.use(RateLimiter);
 // EXPRESS_APP.use(SESSION_DATA);
 EXPRESS_APP.use(Routes);

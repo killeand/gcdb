@@ -29,6 +29,8 @@ export default (req, res, next) => {
     catch (error) {
         console.error("JWTVerify:", error);
     }
+
+    res.locals.Token = AuthToken;
     
     next();
 }
