@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
 import $ from '../scripts/GCDBAPI';
 import UserContext from '../components/UserContext';
+import TM from '../scripts/TokenManager';
 
 import Group from '../components/Group';
 import Alert from '../components/Alert';
@@ -33,7 +34,7 @@ export default class Login extends Component {
             return;
         }
         
-        $.Post($.Path.Users.Auth, null, {
+        $.Post($.Path.Auth.Login, null, {
             Email:findDOMNode(this.formInputs.Username).value,
             Password:findDOMNode(this.formInputs.Password).value
         })
@@ -47,9 +48,14 @@ export default class Login extends Component {
                     this.setState({ErrorMsg:"Authentication server error"});
         })
         .then((data, error) => {
-            if (_.has(data, "success")) {
+            if (_.has(data, "access_token") && _.has(data, "refresh_token")) {
+                localStorage.setItem("access_token", data.access_token);
+                localStorage.setItem("refresh_token", data.refresh_token);
+
+                let Token = TM.DecodeAuth();
+
+                this.context.setUser(Token.user);
                 this.setState({LoginSuccess:true});
-                this.context.startCheck();
             }
             else if (_.has(data, "error"))
                 this.setState({ErrorMsg:data.error});

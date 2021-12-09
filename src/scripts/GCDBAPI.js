@@ -47,7 +47,15 @@ const GCDBAPI = {
     },
     Get: (path, headers) => {
         return GCDBAPI.Execute(path, headers, "GET");
+    },
+    AuthHeader: () => {
+        let Token = localStorage.getItem("auth_token");
+        
+        if (!_.isNil(Token))
+            return { "Authorization": `Bearer ${Token}` };
+        
+        return null;
     }
-}
+};
 
 export default GCDBAPI;

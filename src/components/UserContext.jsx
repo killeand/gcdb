@@ -1,58 +1,34 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
-import $ from '../scripts/GCDBAPI';
+import _ from 'lodash';
+import TM from '../scripts/TokenManager';
 
 const UserContext = React.createContext(null);
 
 export class UserProvider extends Component {
-    state = {
-        data: null
+    constructor(props) {
+        super(props);
+
+        let Token = TM.DecodeAuth();
+        let UserData = null;
+        if (!_.isNil(Token)) {
+            UserData = Token.user;
+        }
+
+        this.state = {
+            UserData: UserData
+        }
     }
 
-    checkTimer = null;
-    firstLoad = false;
-
-    StartCheck(passedThis) {
-        let newThis = null;
-
-        if (_.has(this, "state")) newThis = this;
-        else newThis = passedThis;
-
-        // $.Get($.Path.Users.Check)
-        // .then((response, error) => {
-        //     return response.json();
-        // })
-        // .then((data, error) => {
-        //     if (_.has(data, "error")) {
-        //         newThis.StopCheck();
-        //     }
-        //     else {
-        //         if (newThis.checkTimer == null) {
-        //             newThis.checkTimer = setInterval(() => newThis.StartCheck(newThis), 60 * 1000);
-        //             newThis.setState({data:data});
-        //         }
-        //     }   
-        // })
-    }
-
-    StopCheck() {
-        clearInterval(this.checkTimer);
-        this.checkTimer = null;
-        this.setState({data:null});
+    SetUserData(value) {
+        this.setState({UserData: value});
     }
 
     render() {
-        if (!this.firstLoad) {
-            this.StartCheck();
-            this.firstLoad = true;
-        }
-
-        let user = this.state.data;
-        let startCheck = this.StartCheck.bind(this);
-        let stopCheck = this.StopCheck.bind(this);
+        let user = this.state.UserData;
+        let setUser = this.SetUserData.bind(this);
 
         return (
-            <UserContext.Provider value={{user, startCheck, stopCheck}}>
+            <UserContext.Provider value={{user, setUser}}>
                 {this.props.children}
             </UserContext.Provider>
         );

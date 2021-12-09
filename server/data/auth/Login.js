@@ -74,8 +74,8 @@ ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
     let accessbody = {
         iss: req.hostname,
         aud: "GCDBUser",
-        exp: Date.now() + (10 * 60 * 1000),
-        iat: Date.now(),
+        exp: Math.floor(Date.now() / 1000) + (10 * 60 * 1000),
+        iat: Math.floor(Date.now() / 1000),
         user: {
             DisplayName: UserDoc.DisplayName,
             Perms: UserDoc.Perms
@@ -84,8 +84,8 @@ ROUTE.post(/^.*$/, Express.json(), async (req, res, next) => {
     let refreshbody = {
         iss: req.hostname,
         aud: "GCDBUser",
-        exp: Date.now() + (10 * 60 * 1000),
-        iat: Date.now(),
+        exp: Math.floor(Date.now() / 1000) + (10 * 60 * 1000),
+        iat: Math.floor(Date.now() / 1000),
         rid: rid
     }
     

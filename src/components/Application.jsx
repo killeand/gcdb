@@ -71,14 +71,14 @@ export default class Application extends Component {
                         </aside>
                         <div className={"md:m-2 " + ((this.state.ShowMenu)?"md:w-5/6 w-full":"w-full") }>
                             <Switch>
-                                <Route exact path="/" render={() => <Suspense fallback={<Loading />}><Home /></Suspense>} />
-                                <Route exact path="/login" render={() => <Suspense fallback={<Loading />}><Login /></Suspense>} />
-                                <Route exact path="/logout" render={() => <Suspense fallback={<Loading />}><Logout /></Suspense>} />
-                                <Route exact path="/admin" render={() => <Suspense fallback={<Loading />}><Admin /></Suspense>} />
-                                <Route exact path="/admin/users" render={() => <Suspense fallback={<Loading />}><AdminUsers /></Suspense>} />
-                                <Route exact path="/admin/exe" render={() => <Suspense fallback={<Loading />}><ExecuteAPI /></Suspense>} />
-                                <Route exact path="/tools" render={() => <Suspense fallback={<Loading />}><Tools /></Suspense>} />
-                                <Route exact path="/404" render={() => <Suspense fallback={<Loading />}><PageNotFound /></Suspense>} />
+                                <Route exact path="/" render={(props) => <Suspense fallback={<Loading />}><Home {...props} /></Suspense>} />
+                                <Route exact path="/login" render={(props) => <Suspense fallback={<Loading />}><Login {...props} /></Suspense>} />
+                                <Route exact path="/logout" render={(props) => <Suspense fallback={<Loading />}><Logout {...props} /></Suspense>} />
+                                <Route exact path="/admin" render={(props) => <Suspense fallback={<Loading />}><Admin {...props} /></Suspense>} />
+                                <Route exact path="/admin/users" render={(props) => <Suspense fallback={<Loading />}><AdminUsers {...props} /></Suspense>} />
+                                <Route exact path="/admin/exe" render={(props) => <Suspense fallback={<Loading />}><ExecuteAPI {...props} /></Suspense>} />
+                                <Route exact path="/tools" render={(props) => <Suspense fallback={<Loading />}><Tools {...props} /></Suspense>} />
+                                <Route exact path="/404" render={(props) => <Suspense fallback={<Loading />}><PageNotFound {...props} /></Suspense>} />
                                 <Route>
                                     <Redirect to="/404" />
                                 </Route>

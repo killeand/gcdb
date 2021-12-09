@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import UserContext from '../components/UserContext';
 import $ from '../scripts/GCDBAPI';
+import TM from '../scripts/TokenManager';
 
 export default class Logout extends Component {
     static contextType = UserContext;
@@ -12,9 +13,11 @@ export default class Logout extends Component {
 
     componentDidMount() {
         if (this.context.user) {
-            this.context.stopCheck();
+            $.Post($.Path.Auth.Logout, null, {refresh_token: TM.GetRefresh()});
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            this.context.setUser(null);
             setTimeout(() => this.setState({Redir: true}), 20 * 1000);
-            $.Get($.Path.Users.Logout);
         }
         else {
             this.setState({Redir: true});

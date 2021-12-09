@@ -8,11 +8,6 @@ export default function withAuth(newProps, permission) {
         return class AuthedComponent extends Component {
             static contextType = UserContext;
 
-            componentDidMount() {
-                if (!_.isNil(this.context.user))
-                    this.context.startCheck();
-            }
-
             render() {
                 let Authorized = 0;
                 if (this.context.user) {
